@@ -8,12 +8,14 @@
           label-cols-sm="3"
           label="Username:"
           label-for="Username"
+          class="form-group-custom"
         >
           <b-form-input
             id="Username"
             v-model="$v.form.username.$model"
             type="text"
             :state="validateState('username')"
+            class="form-input-custom"
           ></b-form-input>
           <b-form-invalid-feedback>
             Username is required
@@ -25,12 +27,14 @@
           label-cols-sm="3"
           label="Password:"
           label-for="Password"
+          class="form-group-custom"
         >
           <b-form-input
             id="Password"
             type="password"
             v-model="$v.form.password.$model"
             :state="validateState('password')"
+            class="form-input-custom"
           ></b-form-input>
           <b-form-invalid-feedback>
             Password is required
@@ -40,8 +44,7 @@
         <b-button
           type="submit"
           variant="primary"
-          style="width:100px;display:block;"
-          class="mx-auto w-100"
+          class="mx-auto w-100 form-button-custom"
           >Login</b-button
         >
         <div class="mt-2">
@@ -64,7 +67,7 @@
 
 <script>
 import { required } from "vuelidate/lib/validators";
-import {mockLogin} from "../services/auth.js"
+import { mockLogin } from "../services/auth.js";
 export default {
   name: "Login",
   data() {
@@ -93,10 +96,8 @@ export default {
     },
     async Login() {
       try {
-        
         // const response = await this.axios.post(
         //   this.$root.store.server_domain +"/Login",
-
 
         //   {
         //     username: this.form.username,
@@ -134,9 +135,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .background {
-  background-image: url('https://www.hashikma-holon.co.il/wp-content/uploads/2020/01/0c260b3bdf6c00cd475c41b69f606002-e1579793616823.jpg');
+  background-image: url('https://static.vecteezy.com/system/resources/thumbnails/008/660/558/small_2x/organic-food-background-hand-drawn-concept-free-vector.jpg ');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -147,20 +147,39 @@ export default {
 }
 
 .container {
-  max-width: 400px;
-  background-color: rgba(255, 255, 255, 0.9);
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 700px; /* Width of the container */
+  height: 400px; /* Height of the container */
+  background: rgb(168, 153, 121); /* Pink and red gradient background */
+  padding: 40px; /* Increase padding */
+  border-radius: 25px;
+  box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1);
+  font-size: 1.55rem; /* Increase font size */
 }
 
 .custom-font {
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
+
 .title {
-  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px; /* Increase bottom margin */
+  font-size: 2.85rem; /* Increase title font size */
+  // font-weight: bold;
+}
+
+.form-group-custom {
+  font-size: 1.55rem; /* Increase form group font size */
+}
+
+.form-input-custom {
+  font-size: 1.55rem; /* Increase input font size */
+  padding: 10px; /* Increase padding */
+}
+
+.form-button-custom {
+  font-size: 1.55rem; /* Increase button font size */
+  padding: 10px 20px; /* Increase padding */
 }
 
 </style>
