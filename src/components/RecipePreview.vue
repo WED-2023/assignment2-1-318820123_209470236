@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <router-link
     :to="{ name: 'recipe', params: { recipeId: recipe.id } }"
     class="recipe-preview"
@@ -137,5 +137,89 @@ export default {
   width: 90px;
   display: table-cell;
   text-align: center;
+}
+</style> -->
+
+<template>
+  <div class="recipe-preview">
+    <img :src="recipe.image" alt="Recipe Image" class="recipe-image" />
+    <div class="recipe-content">
+      <h3 class="recipe-title">{{ recipe.title }}</h3>
+      <p class="recipe-description">{{ recipe.description }}</p>
+      <p class="recipe-details">
+        <strong>Time:</strong> {{ recipe.time }}<br>
+        <strong>Popularity:</strong> {{ recipe.popularity }}<br>
+        <strong>Ingredients:</strong> {{ recipe.ingredients.join(', ') }}
+      </p>
+      <a :href="recipe.url" target="_blank" class="recipe-link">View Recipe</a>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "RecipePreview",
+  props: {
+    recipe: {
+      type: Object,
+      required: true
+    }
+  }
+};
+</script>
+
+<style scoped>
+.recipe-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.recipe-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.recipe-content {
+  padding: 10px;
+  text-align: center;
+}
+
+.recipe-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.recipe-description {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.recipe-details {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 10px;
+}
+
+.recipe-link {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+.recipe-link:hover {
+  background-color: #0056b3;
 }
 </style>
