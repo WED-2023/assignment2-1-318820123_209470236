@@ -136,7 +136,7 @@ export default {
 <style lang="scss" scoped>
 
 .background {
-  background-image: url('https://www.hashikma-holon.co.il/wp-content/uploads/2020/01/0c260b3bdf6c00cd475c41b69f606002-e1579793616823.jpg');
+  background-image: url('https://static.vecteezy.com/system/resources/thumbnails/008/660/558/small_2x/organic-food-background-hand-drawn-concept-free-vector.jpg ');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
