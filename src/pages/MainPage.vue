@@ -87,6 +87,7 @@ export default {
 </script>
 
 <style scoped>
+
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr;

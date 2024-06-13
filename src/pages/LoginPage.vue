@@ -49,7 +49,7 @@
         >
         <div class="mt-2">
           Do not have an account yet?
-          <router-link to="register"> Register in here</router-link>
+          <router-link to="register" class="login-link"> Register in here</router-link>
         </div>
       </b-form>
       <b-alert
@@ -158,28 +158,44 @@ export default {
 
 .custom-font {
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+ font-size: 1.55rem;
 }
 
 .title {
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   text-align: center;
-  margin-bottom: 30px; /* Increase bottom margin */
-  font-size: 2.85rem; /* Increase title font size */
-  // font-weight: bold;
+  margin-bottom: 30px; 
+  font-size: 2.85rem; 
+  color: #333;
+
 }
 
 .form-group-custom {
-  font-size: 1.55rem; /* Increase form group font size */
+  font-size: 1.55rem;
 }
 
 .form-input-custom {
-  font-size: 1.55rem; /* Increase input font size */
-  padding: 10px; /* Increase padding */
+  border-radius: 8px;
+  font-size: 1.55rem; 
+  padding: 10px; 
 }
 
 .form-button-custom {
-  font-size: 1.55rem; /* Increase button font size */
-  padding: 10px 20px; /* Increase padding */
+  font-size: 1.55rem; 
+  padding: 10px 20px;
+  border-radius: 11px;
+  background-color: #dbcbb3;
+  border: 3px solid #6c4e3c; 
+  color: #6c4e3c;
+}
+
+.login-link {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.login-link:hover {
+  text-decoration: underline;
 }
 
 </style>
