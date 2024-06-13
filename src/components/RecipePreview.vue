@@ -197,7 +197,7 @@ export default {
   margin-bottom: 5px;
 }
 
-.recipe-button {
+
 .recipe-button {
   display: inline-block;
   padding: 10px 20px;

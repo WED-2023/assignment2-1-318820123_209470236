@@ -25,11 +25,11 @@ const routes = [
     name: "myRecipes",
     component: () => import("./pages/MyRecipesPage.vue"),
   }, 
-  // {
-  //   path: "/about",
-  //   name: "about",
-  //   component: () => import("./pages/AboutPage"),
-  // },
+  {
+    path: "/about",
+    name: "about",
+    component: () => import("./pages/AboutPage"),
+  },
 
   {
     path: "/recipe",
