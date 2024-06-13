@@ -163,3 +163,4 @@ export default {
 .user-icon {
   margin-left: 10px; /* Space between username and user icon */
 }
+</style>
