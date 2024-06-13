@@ -217,7 +217,7 @@ export default {
 
 <style scoped>
 .background {
-  background-image: url('https://static.vecteezy.com/system/resources/thumbnails/008/660/558/small_2x/organic-food-background-hand-drawn-concept-free-vector.jpg');
+  background-image: url('https://static.vecteezy.com/system/resources/thumbnails/008/660/558/small_2x/organic-food-background-hand-drawn-concept-free-vector.jpg ');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -227,9 +227,11 @@ export default {
   align-items: center;
 }
 
+
 .container {
-  max-width: 500px;
-  background-color: rgba(255, 255, 255, 0.9);
+  width: 700px; /* Width of the container */
+  height: 550px;
+  background-color: rgb(168, 153, 121);
   padding: 30px;
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -237,12 +239,13 @@ export default {
 
 .custom-font, .custom-font * {
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; /* ניתן להחליף את Arial לפונט הרצוי */
+  font-size: 1.55rem;
 }
 
 .title {
   text-align: center;
-  margin-bottom: 20px;
-  font-size: 24px;
+  margin-bottom: 30px;
+  font-size: 2.85rem;
   color: #333;
 }
 
@@ -267,15 +270,15 @@ export default {
 .reset-button, .submit-button {
   width: 48%;
   padding: 10px;
-  border-radius: 8px;
-  font-size: 16px;
-  background-color: #ff69b4; /* צבע ורוד */
-  border-color: #ff69b4; /* צבע גבול תואם */
-  color: white; /* צבע טקסט */
+  border-radius: 11px;
+  font-size: 1.55rem;
+  background-color: #dbcbb3;
+  border: 3px solid #6c4e3c; 
+  color: #6c4e3c;
 }
 
 .login-link {
-  color: #007bff;
+  color: #ffffff;
   text-decoration: none;
 }
 

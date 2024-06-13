@@ -1,179 +1,127 @@
 <template>
-  <div>
-    <div class="right-column">
-      <template v-if="!$root.store.username">
-        <div class="guest-section">
-        </div>
-      </template>
-      <template v-else>
-        <!-- {{ $root.store.username }}: <button @click="Logout">Logout</button>| -->
-      </template>
-    </div>
+  <div class="background">
     <div class="container">
-      <h1 class="title">Main Page</h1>
-      <template v-if="!$root.store.username">
-        <div class="guest-section">
-
-          <router-link :to="{ name: 'register' }" style="margin-top: 200px; margin-right: 840px;">Register</router-link>
-          <router-link :to="{ name: 'login' }" style="margin-top: 10px; margin-right: 850px;">Login</router-link>
-        </div>
-      </template>
-      <template v-else>
-        <!-- {{ $root.store.username }}: <button @click="Logout">Logout</button>| -->
-      </template>
-      <div class="columns">
-        <div class="left-column">
-          <h2 class="explore-title">Explore these recipes</h2>
-          <div class="recipes-row">
-            <RecipePreview
-              v-for="(recipe, index) in randomRecipes"
-              :key="index"
-              :recipe="recipe"
-            />
-          </div>
-          <button @click="fetchRandomRecipes" class="get-recipes-button">Get New Recipes</button>
+      <div class="left-side-container">
+        <div class="left-side">
+          <RecipePreviewList title="Random Recipes" :recipes="randomRecipes" :amountToShow="numRandomRecipes" />
+          <button @click="fetchRandomRecipes" class="form-button-custom">Get New Recipes</button>
         </div>
       </div>
-      <router-link v-if="!$root.store.username" to="/login" tag="button">You need to Login to view this</router-link>
-      {{ !$root.store.username }}
-      <RecipePreviewList
-        title="Last Viewed Recipes"
-        :class="{
-          RandomRecipes: true,
-          blur: !$root.store.username,
-          center: true
-        }"
-        disabled
-      ></RecipePreviewList>
+      <div class="right-side-container">
+        <div class="right-side">
+          <template v-if="!$root.store.username">
+            <div class="guest-section">
+              <button @click="goToLogin" class="login">Click To Login</button>
+              <button @click="goToRegister" class="register">Click To Register</button>
+            </div>
+          </template>
+
+          <template v-else>
+            <div class="user-section">
+              <RecipePreviewList title="Last Viewed Recipes" :recipes="lastViewedRecipes" :amountToShow="numLastViewedRecipes" />
+            </div>
+          </template>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import RecipePreview from "../components/RecipePreview";
-import RecipePreviewList from "../components/RecipePreviewList";
-import { mockGetRecipesPreview } from "../services/recipes";
+import { mockGetLastViewedRecipes, mockGetRecipesPreview } from "@/services/recipes";
+import RecipePreviewList from "@/components/RecipePreviewList.vue";
 
 export default {
   components: {
-    RecipePreview,
     RecipePreviewList
   },
   data() {
     return {
-      randomRecipes: []
+      lastViewedRecipes: [],
+      randomRecipes: [],
+      numRandomRecipes: 3,
+      numLastViewedRecipes: 5
     };
   },
   methods: {
+    goToLogin() {
+      this.$router.push({ name: 'login' });
+    },
+    goToRegister() {
+      this.$router.push({ name: 'register' });
+    },
+    fetchLastViewedRecipes() {
+      if (this.$root.store.username) {
+        const response = mockGetLastViewedRecipes();
+        this.lastViewedRecipes = response.data.recipes;
+      }
+    },
     fetchRandomRecipes() {
-      console.log('Fetching new recipes...');
       const response = mockGetRecipesPreview(3);
-      console.log('Received recipes:', response.data.recipes);
-      const recipes = response.data.recipes.map(recipe => ({
-        title: recipe.title,
-        description: recipe.description,
-        date: recipe.date,
-        time: recipe.time,
-        image: recipe.image,
-        url: recipe.url
-      }));
-      this.randomRecipes = recipes;
-      console.log('Updated randomRecipes:', this.randomRecipes);
+      this.randomRecipes = response.data.recipes;
     }
   },
   mounted() {
-    this.fetchRandomRecipes();
+    this.fetchLastViewedRecipes();
+    this.fetchRandomRecipes(); // Load initial random recipes
   }
-};
+}
 </script>
 
 <style scoped>
-.container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  position: relative;
-}
-
-.left-column, .right-column {
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.right-column {
+.background {
+  background-image: url("https://static.vecteezy.com/system/resources/thumbnails/008/660/558/small_2x/organic-food-background-hand-drawn-concept-free-vector.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 }
-
+.container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  gap: 20px; /* Added gap for better spacing */
+  flex-wrap: nowrap; /* Ensure no wrapping */
+}
+.left-side-container, .right-side-container {
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  flex: 1 1 auto; /* Flexible width with a base of 48% */
+  max-width: 60%;
+}
+.left-side, .right-side {
+  padding: 20px;
+}
 .guest-section {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-}
-
-.register-button {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  text-decoration: none;
-  border-radius: 4px;
-  margin-top: 300px;
-  margin-right: 850px;
-  font-size: 16px;
-  text-align: center;
-}
-
-
-.login-button {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  text-decoration: none;
-  border-radius: 4px;
-  margin-top: 10px;
-  font-size: 16px;
-  text-align: center;
-  margin-right: 860px;
-}
-
-.register-button:hover, .login-button:hover {
-  background-color: #0056b3;
-}
-
-.recipes-row {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-.explore-title {
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-  font-size: 24px;
-  color: #333;
-  margin-bottom: 20px;
-  margin-left: 20px;
-}
-
-.get-recipes-button {
+  align-items: center;
   margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
 }
-
-.get-recipes-button:hover {
-  background-color: #0056b3;
+.login, .register {
+  display: inline-block;
+  padding: 20px 40px; /* Increased padding for bigger buttons */
+  background-color: #c8a65d;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  margin-top: 20px;
+  font-size: 20px; /* Increased font size */
+  text-align: center;
+}
+.form-button-custom {
+  font-size: 1.55rem;
+  padding: 10px 20px;
+  border-radius: 11px;
+  background-color: #dbcbb3;
+  border: 3px solid #6c4e3c;
+  color: #6c4e3c;
 }
 </style>

@@ -1,11 +1,8 @@
-import Main from "./pages/MainPage";
-import NotFound from "./pages/NotFoundPage";
-
 const routes = [
   {
     path: "/",
     name: "main",
-    component: Main,
+    component: () => import("./pages/MainPage"),
   },
   {
     path: "/register",
@@ -22,22 +19,23 @@ const routes = [
     name: "search",
     component: () => import("./pages/SearchPage"),
   },
-  // {
-  //   path: "/about",
-  //   name: "about",
-  //   component: () => import("./pages/AboutPage"),
-  // },
-
   {
-    path: "   ",
+    path: "/about",
+    name: "about",
+    component: () => import("./pages/AboutPage"),
+  },
+  {
+    path: "/recipe",
     name: "recipe",
     component: () => import("./pages/RecipeViewPage"),
   },
   {
     path: "*",
     name: "notFound",
-    component: NotFound,
+    component:  () => import("./pages/NotFoundPage"),
   },
+
+  
 ];
 
 export default routes;

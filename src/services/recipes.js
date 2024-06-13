@@ -16,3 +16,8 @@ export function mockGetRecipeFullDetails(recipeId) {
     return { data: { recipe: recipe_full_view } } ;
   }
   
+  export function mockGetLastViewedRecipes() {
+    // Mocked response for the last viewed recipes
+    let lastViewedRecipes = [recipe_preview, recipe_preview]; // Add more if needed
+    return { data: { recipes: lastViewedRecipes } };
+  }
