@@ -22,6 +22,12 @@ const routes = [
     name: "search",
     component: () => import("./pages/SearchPage"),
   },
+
+  {
+    path: "/my-recipes",
+    name: "myRecipes",
+    component: () => import("./pages/MyRecipesPage.vue"),
+  }, 
   // {
   //   path: "/about",
   //   name: "about",
