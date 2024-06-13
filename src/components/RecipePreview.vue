@@ -8,7 +8,7 @@
         <strong>Published on:</strong> {{ recipe.date }}<br>
         <strong>Time:</strong> {{ recipe.time }}
       </p>
-      <a :href="recipe.url" target="_blank" class="recipe-link">View Recipe</a>
+      <button @click="viewRecipe" class="recipe-button">View Recipe</button>
     </div>
   </div>
 </template>
@@ -20,6 +20,11 @@ export default {
     recipe: {
       type: Object,
       required: true
+    }
+  },
+  methods: {
+    viewRecipe() {
+      this.$router.push({ name: 'recipe', params: { id: this.recipe.id } });
     }
   }
 };
@@ -35,14 +40,14 @@ export default {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 10px;
   margin-bottom: 20px;
-  max-width: 200px; /* הוספנו הגבלה לרוחב */
+  max-width: 200px; /* Max width added */
 }
 
 .recipe-image {
   width: 100%;
   height: auto;
-  border-radius: 8px;
-  max-height: 100px; /* הוספנו הגבלה לגובה */
+  border-radius: 22px;
+  max-height: 100px; /* Max height added */
 }
 
 .recipe-content {
@@ -51,35 +56,37 @@ export default {
 }
 
 .recipe-title {
-  font-size: 16px; /* הקטנו את הגופן */
+  font-size: 16px; /* Font size reduced */
   font-weight: bold;
   color: #333;
   margin-bottom: 5px;
 }
 
 .recipe-description {
-  font-size: 12px; /* הקטנו את הגופן */
+  font-size: 12px; /* Font size reduced */
   color: #555;
   margin-bottom: 5px;
 }
 
 .recipe-meta {
-  font-size: 10px; /* הקטנו את הגופן */
+  font-size: 10px; /* Font size reduced */
   color: #777;
   margin-bottom: 5px;
 }
 
-.recipe-link {
+.recipe-button {
   display: inline-block;
-  padding: 5px 10px;
-  background-color: #007bff;
+  padding: 10px 20px;
+  background-color: #c8a65d;
   color: white;
   text-decoration: none;
-  border-radius: 4px;
-  font-size: 12px; /* הקטנו את הגופן */
+  border-radius: 22px;
+  font-size: 15px; /* Font size reduced */
+  border: 2px solid white; /* To make it more button-like */
 }
 
-.recipe-link:hover {
-  background-color: #0056b3;
+.recipe-button:hover {
+  background-color: #c8a65d;
+  color: white;
 }
 </style>
