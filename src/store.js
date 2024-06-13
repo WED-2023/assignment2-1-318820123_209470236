@@ -6,3 +6,18 @@ const state = {
     
 
 };
+
+// export default {
+//     state: {
+//       recipes: []
+//     },
+//     mutations: {
+//       addRecipe(state, recipe) {
+//         state.recipes.push(recipe);
+//       },
+//       deleteRecipe(state, id) {
+//         state.recipes = state.recipes.filter(recipe => recipe.id !== id);
+//       }
+//     }
+//   };
+  
