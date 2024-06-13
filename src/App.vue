@@ -13,7 +13,7 @@
         </template>
         <!-- Show Add New Recipe and Personal Area dropdown if user is logged in -->
         <template v-else>
-          <b-nav-item @click="showNewRecipeModal">Add new recipe</b-nav-item>
+          <b-nav-item :to="{ name: 'addNewRecipes' }">Add new recipe</b-nav-item>
           <b-nav-item-dropdown text="Personal Area" right>
             <b-dropdown-item :to="{ name: 'favorites' }">My favorite recipes</b-dropdown-item>
             <b-dropdown-item :to="{ name: 'myRecipes' }">My recipes</b-dropdown-item>
@@ -39,24 +39,12 @@
       </div>
     </div>
     <router-view />
-    <!-- Add New Recipe Modal -->
-    <NewRecipe v-if="isModalVisible" @close="hideNewRecipeModal"/>
   </div>
 </template>
 
 <script>
-import NewRecipe from './components/NewRecipe.vue';
-
 export default {
   name: "App",
-  components: {
-    NewRecipe
-  },
-  data() {
-    return {
-      isModalVisible: false
-    };
-  },
   methods: {
     // Logout method
     Logout() {
@@ -65,12 +53,6 @@ export default {
       this.$router.push("/").catch(() => {
         this.$forceUpdate();
       });
-    },
-    showNewRecipeModal() {
-      this.isModalVisible = true;
-    },
-    hideNewRecipeModal() {
-      this.isModalVisible = false;
     }
   }
 };
@@ -161,5 +143,6 @@ export default {
 
 /* User icon styling */
 .user-icon {
-  margin-left: 10px; /* Space between username and user icon */
+  margin-left: 10px; /* Space between username and user icon */
 }
+</style>
