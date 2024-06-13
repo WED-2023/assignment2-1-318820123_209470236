@@ -5,7 +5,7 @@
       <slot></slot>
     </h3>
     <b-row>
-      <b-col v-for="r in recipes" :key="r.id">
+      <b-col v-for="r in displayedRecipes" :key="r.id">
         <RecipePreview class="recipePreview" :recipe="r" />
       </b-col>
     </b-row>
@@ -14,7 +14,6 @@
 
 <script>
 import RecipePreview from "./RecipePreview.vue";
-import { mockGetRecipesPreview } from "../services/recipes.js";
 
 export default {
   name: "RecipePreviewList",
@@ -25,28 +24,19 @@ export default {
     title: {
       type: String,
       required: true
+    },
+    recipes: {
+      type: Array,
+      required: true
+    },
+    amountToShow: {
+      type: Number,
+      default: 3
     }
   },
-  data() {
-    return {
-      recipes: []
-    };
-  },
-  mounted() {
-    this.updateRecipes();
-  },
-  methods: {
-    async updateRecipes() {
-      try {
-        const amountToFetch = 5; // Set this to how many recipes you want to fetch
-        const response = mockGetRecipesPreview(amountToFetch);
-        console.log(response);
-        const recipes = response.data.recipes;
-        console.log(recipes);
-        this.recipes = recipes;
-      } catch (error) {
-        console.log(error);
-      }
+  computed: {
+    displayedRecipes() {
+      return this.recipes.slice(0, this.amountToShow);
     }
   }
 };
