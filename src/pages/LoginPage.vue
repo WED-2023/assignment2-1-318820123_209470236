@@ -8,12 +8,14 @@
           label-cols-sm="3"
           label="Username:"
           label-for="Username"
+          class="form-group-custom"
         >
           <b-form-input
             id="Username"
             v-model="$v.form.username.$model"
             type="text"
             :state="validateState('username')"
+            class="form-input-custom"
           ></b-form-input>
           <b-form-invalid-feedback>
             Username is required
@@ -25,12 +27,14 @@
           label-cols-sm="3"
           label="Password:"
           label-for="Password"
+          class="form-group-custom"
         >
           <b-form-input
             id="Password"
             type="password"
             v-model="$v.form.password.$model"
             :state="validateState('password')"
+            class="form-input-custom"
           ></b-form-input>
           <b-form-invalid-feedback>
             Password is required
@@ -40,13 +44,12 @@
         <b-button
           type="submit"
           variant="primary"
-          style="width:100px;display:block;"
-          class="mx-auto w-100"
+          class="mx-auto w-100 form-button-custom"
           >Login</b-button
         >
         <div class="mt-2">
           Do not have an account yet?
-          <router-link to="register"> Register in here</router-link>
+          <router-link to="register" class="login-link"> Register in here</router-link>
         </div>
       </b-form>
       <b-alert
@@ -64,7 +67,7 @@
 
 <script>
 import { required } from "vuelidate/lib/validators";
-import {mockLogin} from "../services/auth.js"
+import { mockLogin } from "../services/auth.js";
 export default {
   name: "Login",
   data() {
@@ -93,10 +96,8 @@ export default {
     },
     async Login() {
       try {
-        
         // const response = await this.axios.post(
         //   this.$root.store.server_domain +"/Login",
-
 
         //   {
         //     username: this.form.username,
@@ -134,7 +135,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .background {
   background-image: url('https://static.vecteezy.com/system/resources/thumbnails/008/660/558/small_2x/organic-food-background-hand-drawn-concept-free-vector.jpg ');
   background-size: cover;
@@ -147,20 +147,55 @@ export default {
 }
 
 .container {
-  max-width: 400px;
-  background-color: rgba(255, 255, 255, 0.9);
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 700px; /* Width of the container */
+  height: 400px; /* Height of the container */
+  background: rgb(168, 153, 121); /* Pink and red gradient background */
+  padding: 40px; /* Increase padding */
+  border-radius: 25px;
+  box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1);
+  font-size: 1.55rem; /* Increase font size */
 }
 
 .custom-font {
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+ font-size: 1.55rem;
 }
+
 .title {
-  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px; 
+  font-size: 2.85rem; 
+  color: #333;
+
+}
+
+.form-group-custom {
+  font-size: 1.55rem;
+}
+
+.form-input-custom {
+  border-radius: 8px;
+  font-size: 1.55rem; 
+  padding: 10px; 
+}
+
+.form-button-custom {
+  font-size: 1.55rem; 
+  padding: 10px 20px;
+  border-radius: 11px;
+  background-color: #dbcbb3;
+  border: 3px solid #6c4e3c; 
+  color: #6c4e3c;
+}
+
+.login-link {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.login-link:hover {
+  text-decoration: underline;
 }
 
 </style>

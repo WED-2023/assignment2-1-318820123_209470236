@@ -36,9 +36,7 @@
     name: 'NewRecipe',
     data() {
       return {
-        recipeName: '',
-        ingredients: '',
-        servings: '',
+        name: '',
         visible: true
       };
       },
@@ -98,6 +96,7 @@
   
   .close {
     color: #aaa;
+    float: right;
     float: right;
     font-size: 28px;
     font-weight: bold;

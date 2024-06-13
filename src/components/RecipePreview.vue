@@ -158,11 +158,14 @@ export default {
   padding: 10px;
   margin-bottom: 20px;
   max-width: 200px; /* Max width added */
+  max-width: 200px; /* Max width added */
 }
 
 .recipe-image {
   width: 100%;
   height: auto;
+  border-radius: 22px;
+  max-height: 100px; /* Max height added */
   border-radius: 22px;
   max-height: 100px; /* Max height added */
 }
@@ -174,6 +177,7 @@ export default {
 
 .recipe-title {
   font-size: 16px; /* Font size reduced */
+  font-size: 16px; /* Font size reduced */
   font-weight: bold;
   color: #333;
   margin-bottom: 5px;
@@ -181,18 +185,23 @@ export default {
 
 .recipe-description {
   font-size: 12px; /* Font size reduced */
+  font-size: 12px; /* Font size reduced */
   color: #555;
   margin-bottom: 5px;
 }
 
 .recipe-meta {
   font-size: 10px; /* Font size reduced */
+  font-size: 10px; /* Font size reduced */
   color: #777;
   margin-bottom: 5px;
 }
 
 .recipe-button {
+.recipe-button {
   display: inline-block;
+  padding: 10px 20px;
+  background-color: #c8a65d;
   padding: 10px 20px;
   background-color: #c8a65d;
   color: white;
