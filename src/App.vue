@@ -13,7 +13,7 @@
         </template>
         <!-- Show Add New Recipe and Personal Area dropdown if user is logged in -->
         <template v-else>
-          <b-nav-item :to="{ name: 'addNewRecipes' }">Add new recipe</b-nav-item>
+          <b-nav-item @click="showNewRecipeModal">Add new recipe</b-nav-item>
           <b-nav-item-dropdown text="Personal Area" right>
             <b-dropdown-item :to="{ name: 'favorites' }">My favorite recipes</b-dropdown-item>
             <b-dropdown-item :to="{ name: 'myRecipes' }">My recipes</b-dropdown-item>
@@ -32,16 +32,31 @@
           <b-nav-item @click="Logout" class="nav-link logout-button">Logout</b-nav-item>
           <span class="separator"></span>
           <span>{{ $root.store.username }}</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="White" class="bi bi-person user-icon" viewBox="0 0 16 16">
+            <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
+          </svg>
         </template>
       </div>
     </div>
     <router-view />
+    <!-- Add New Recipe Modal -->
+    <NewRecipe v-if="isModalVisible" @close="hideNewRecipeModal"/>
   </div>
 </template>
 
 <script>
+import NewRecipe from './components/NewRecipe.vue';
+
 export default {
   name: "App",
+  components: {
+    NewRecipe
+  },
+  data() {
+    return {
+      isModalVisible: false
+    };
+  },
   methods: {
     // Logout method
     Logout() {
@@ -50,6 +65,12 @@ export default {
       this.$router.push("/").catch(() => {
         this.$forceUpdate();
       });
+    },
+    showNewRecipeModal() {
+      this.isModalVisible = true;
+    },
+    hideNewRecipeModal() {
+      this.isModalVisible = false;
     }
   }
 };
@@ -126,7 +147,7 @@ export default {
 .logout-button {
   color: #f3eada !important;
   cursor: pointer;
-  margin-right: -30px; /* Space between logout button and separator */
+  margin-right: -35px; /* Space between logout button and separator */
 }
 
 /* Separator styling */
@@ -136,5 +157,10 @@ export default {
   margin: 0 20px; /* Equal margin on both sides of the separator line */
   display: inline-block;
   vertical-align: middle;
+}
+
+/* User icon styling */
+.user-icon {
+  margin-left: 10px; /* Space between username and user icon */
 }
 </style>

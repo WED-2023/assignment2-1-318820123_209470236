@@ -217,7 +217,7 @@ export default {
 
 <style scoped>
 .background {
-  background-image: url('https://www.hashikma-holon.co.il/wp-content/uploads/2020/01/0c260b3bdf6c00cd475c41b69f606002-e1579793616823.jpg');
+  background-image: url('https://static.vecteezy.com/system/resources/thumbnails/008/660/558/small_2x/organic-food-background-hand-drawn-concept-free-vector.jpg ');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -227,9 +227,10 @@ export default {
   align-items: center;
 }
 
+
 .container {
   max-width: 500px;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgb(168, 153, 121);
   padding: 30px;
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -241,7 +242,7 @@ export default {
 
 .title {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   font-size: 24px;
   color: #333;
 }

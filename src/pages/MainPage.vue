@@ -1,38 +1,56 @@
 <template>
-  <!-- liorrrrrr -->
-  <div class="container">
-    <h1 class="title">Main Page</h1>
-    <div class="columns">
-      <div class="left-column">
-        <h2>Explore this recipes</h2>
-        <RecipePreview
-          v-for="(recipe, index) in randomRecipes"
-          :key="index"
-          :recipe="recipe"
-        />
-        <button @click="fetchRandomRecipes" class="get-recipes-button">Get New Recipes</button>
-      </div>
-      <div class="right-column">
-        <!-- תוכן נוסף לעמודה הימנית יטופל בהמשך -->
-      </div>
+  <div>
+    <div class="right-column">
+      <template v-if="!$root.store.username">
+        <div class="guest-section"></div>
+      </template>
+      <template v-else>
+        <!-- {{ $root.store.username }}: <button @click="Logout">Logout</button>| -->
+      </template>
     </div>
-    <router-link v-if="!$root.store.username" to="/login" tag="button">You need to Login to view this</router-link>
-    {{ !$root.store.username }}
-    <RecipePreviewList
-      title="Last Viewed Recipes"
-      :class="{
-        RandomRecipes: true,
-        blur: !$root.store.username,
-        center: true
-      }"
-      disabled
-    ></RecipePreviewList>
+    <div class="container">
+      <h1 class="title">Main Page</h1>
+      <template v-if="!$root.store.username">
+        <div class="guest-section">
+          <router-link :to="{ name: 'register' }" style="margin-top: 200px; margin-right: 840px;">Register</router-link>
+          <router-link :to="{ name: 'login' }" style="margin-top: 10px; margin-right: 850px;">Login</router-link>
+        </div>
+      </template>
+      <template v-else>
+        <!-- {{ $root.store.username }}: <button @click="Logout">Logout</button>| -->
+      </template>
+      <div class="columns">
+        <div class="left-column">
+          <h2 class="explore-title">Explore these recipes</h2>
+          <div class="recipes-row">
+            <RecipePreview
+              v-for="(recipe, index) in randomRecipes"
+              :key="index"
+              :recipe="recipe"
+            />
+          </div>
+          <button @click="fetchRandomRecipes" class="get-recipes-button">Get New Recipes</button>
+        </div>
+      </div>
+      <router-link v-if="!$root.store.username" to="/login" tag="button">You need to Login to view this</router-link>
+      {{ !$root.store.username }}
+      <RecipePreviewList
+        title="Last Viewed Recipes"
+        :class="{
+          RandomRecipes: true,
+          blur: !$root.store.username,
+          center: true
+        }"
+        disabled
+      ></RecipePreviewList>
+    </div>
   </div>
 </template>
 
 <script>
 import RecipePreview from "../components/RecipePreview";
 import RecipePreviewList from "../components/RecipePreviewList";
+import { mockGetRecipesPreview } from "../services/recipes";
 
 export default {
   components: {
@@ -45,29 +63,21 @@ export default {
     };
   },
   methods: {
-    async fetchRandomRecipes() {
-      try {
-        const response = await fetch('https://www.mako.co.il/food-recipes/recipes_column-bake-off-israel-recipes?Partner=blockscomp');
-        const data = await response.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(data, 'text/html');
-        const recipes = Array.from(doc.querySelectorAll('.recipe-item')).map(recipe => ({
-          title: recipe.querySelector('.recipe-title').textContent.trim(),
-          url: recipe.querySelector('.recipe-title a').href,
-          image: recipe.querySelector('img').src,
-          description: recipe.querySelector('.recipe-description').textContent.trim(),
-          time: recipe.querySelector('.recipe-time').textContent.trim(),
-          popularity: recipe.querySelector('.recipe-popularity').textContent.trim(),
-          ingredients: Array.from(recipe.querySelectorAll('.recipe-ingredients li')).map(li => li.textContent.trim())
-        }));
-        this.randomRecipes = this.getRandomRecipes(recipes, 3);
-      } catch (error) {
-        console.error('Error fetching recipes:', error);
-      }
-    },
-    getRandomRecipes(recipes, count) {
-      const shuffled = recipes.sort(() => 0.5 - Math.random());
-      return shuffled.slice(0, count);
+    fetchRandomRecipes() {
+      console.log('Fetching new recipes...');
+      const response = mockGetRecipesPreview(3);
+      console.log('Received recipes:', response.data.recipes);
+      const recipes = response.data.recipes.map(recipe => ({
+        id: recipe.id,
+        title: recipe.title,
+        description: recipe.description,
+        date: recipe.date,
+        time: recipe.time,
+        image: recipe.image,
+        url: recipe.url
+      }));
+      this.randomRecipes = recipes;
+      console.log('Updated randomRecipes:', this.randomRecipes);
     }
   },
   mounted() {
@@ -81,6 +91,7 @@ export default {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
+  position: relative;
 }
 
 .left-column, .right-column {
@@ -90,10 +101,70 @@ export default {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.right-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.guest-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.register-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #c8a65d;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  margin-top: 300px;
+  margin-right: 850px;
+  font-size: 16px;
+  text-align: center;
+}
+
+.login-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #c8a65d;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  margin-top: 10px;
+  font-size: 16px;
+  text-align: center;
+  margin-right: 860px;
+}
+
+.register-button:hover, .login-button:hover {
+  background-color: #c8a65d;
+}
+
+.recipes-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.explore-title {
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+  margin-left: 20px;
+}
+
 .get-recipes-button {
   margin-top: 20px;
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: #c8a65d;
   color: white;
   border: none;
   border-radius: 4px;
@@ -101,6 +172,6 @@ export default {
 }
 
 .get-recipes-button:hover {
-  background-color: #0056b3;
+  background-color: #c8a65d;
 }
 </style>
