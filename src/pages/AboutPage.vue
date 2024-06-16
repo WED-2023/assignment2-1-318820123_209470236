@@ -13,11 +13,18 @@
 
         <h2>Our Team</h2>
         <div class="team-section">
-          <div class="team-member" v-for="member in team" :key="member.id">
-            <img :src="member.photo" :alt="member.name" class="team-photo" />
-            <h3>{{ member.name }}</h3>
-            <p>{{ member.role }}</p>
-            <p>{{ member.bio }}</p>
+          <div class="team-member">
+            <h3>Lior Amitay</h3>
+            <p>Information systems engineering student</p>
+            <p>Lior is a third year student at Ben Gurion University, Israel.</p>
+          </div>
+          <div class="team-photo-container">
+            <img src="@/assets/Liorx2 pic.jpg" alt="Lior Amitay and Lior Levy" class="team-photo-large" />
+          </div>
+          <div class="team-member">
+            <h3>Lior Levy</h3>
+            <p>Information systems engineering student</p>
+            <p>Lior is a third year student at Ben Gurion University, Israel.</p>
           </div>
         </div>
 
@@ -47,17 +54,15 @@ export default {
       team: [
         {
           id: 1,
-          name: "Lior Levy",
-          role: "Information systems engineering student",
-          bio: "Lior is a third year student at Ben Gurion University, Israel.",
-          photo: "https://via.placeholder.com/150",
-        },
-        {
-          id: 2,
           name: "Lior Amitay",
           role: "Information systems engineering student",
           bio: "Lior is a third year student at Ben Gurion University, Israel.",
-          photo: "https://via.placeholder.com/150",
+        },
+        {
+          id: 2,
+          name: "Lior Levy",
+          role: "Information systems engineering student",
+          bio: "Lior is a third year student at Ben Gurion University, Israel.",
         },
       ],
     };
@@ -67,7 +72,7 @@ export default {
 
 <style lang="scss" scoped>
 .background {
-  background-image: url("https://static.vecteezy.com/system/resources/thumbnails/008/660/558/small_2x/organic-food-background-hand-drawn-concept-free-vector.jpg ");
+  background-image: url("https://static.vecteezy.com/system/resources/thumbnails/008/660/558/small_2x/organic-food-background-hand-drawn-concept-free-vector.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -85,11 +90,11 @@ export default {
   background-color: rgba(255, 255, 255, 0.9);
   border-radius: 30px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 90%; /* Reduced max-width */
+  max-width: 90%;
   width: 100%;
 
   .container {
-    max-width: 1500px; /* Increased max-width */
+    max-width: 1500px;
     margin: auto;
     padding: 20px;
     box-sizing: border-box;
@@ -113,27 +118,34 @@ export default {
   .team-section {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
+    justify-content: center;
+    align-items: center;
 
     .team-member {
-      width: 45%; /* Adjust the width to fit two items in a row */
+      width: 20%;
       margin-bottom: 20px;
       text-align: center;
 
-      .team-photo {
-        width: 150px;
-        height: 150px;
-        border-radius: 50%;
-        margin-bottom: 10px;
-      }
-
       h3 {
-        margin: 10px 0 5px;
+        margin: 10px 10 5px;
         font-size: 1.5rem;
       }
 
       p {
         margin: 5px 0;
+      }
+    }
+
+    .team-photo-container {
+      width: 50%;
+      text-align: center;
+      margin-bottom: 20px;
+
+
+      .team-photo-large {
+        width: 60%; /* Adjust the width to fit the container */
+        height: auto;
+        border-radius: 50px;
       }
     }
   }
