@@ -116,18 +116,6 @@ export default {
 </script>
 
 <style scoped>
-.background {
-  background-image: url("~@/assets/backGround.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-}
-
 .container {
   width: 100%;
 }

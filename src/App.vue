@@ -90,7 +90,7 @@ export default {
 
 /* Navigation bar styling */
 #nav {
-  padding: 30px;
+  padding: 20px;
   background-color: rgb(85, 73, 48); /* Background color for the navigation bar */
 }
 

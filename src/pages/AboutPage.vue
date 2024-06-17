@@ -71,7 +71,7 @@ export default {
 </script>
 
 <style scoped>
-.background {
+/* .background {
   background-image: url("~@/assets/backGround.jpg");
   background-size: cover;
   background-position: center;
@@ -81,7 +81,7 @@ export default {
   justify-content: center;
   align-items: center;
   padding: 20px;
-}
+} */
 
 .about-page {
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;

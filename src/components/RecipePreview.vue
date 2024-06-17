@@ -104,8 +104,9 @@ export default {
 }
 
 .recipe-image {
-  width: 100%;
-  height: auto;
+  width: 300px; /* Fixed width */
+  height: 200px; /* Fixed height */
+  object-fit: cover; /* Maintain aspect ratio and cover the container */
   border-radius: 8px;
 }
 
