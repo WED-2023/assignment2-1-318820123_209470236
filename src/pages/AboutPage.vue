@@ -70,9 +70,9 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .background {
-  background-image: url("https://static.vecteezy.com/system/resources/thumbnails/008/660/558/small_2x/organic-food-background-hand-drawn-concept-free-vector.jpg");
+  background-image: url("~@/assets/backGround.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
