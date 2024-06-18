@@ -71,6 +71,9 @@ export default {
       } else {
         return require('@/assets/heart_empty.png');
       }
+    },
+    isLoggedIn() {
+      return this.$root.store.username;
     }
   },
   methods: {
@@ -78,6 +81,11 @@ export default {
       this.$router.push({ name: 'recipe', params: { id: this.recipe.id } });
     },
     toggleFavorite() {
+      if (!this.isLoggedIn) {
+        alert('Please log in to add favorites');
+        return;
+      }
+      
       this.recipe.favorited = !this.recipe.favorited;
       this.updateFavorites();
       this.$emit('toggle-favorite', this.recipe);

@@ -1,3 +1,8 @@
+import Vue from 'vue';
+import Vuex from 'vuex';
+
+Vue.use(Vuex);
+
 const state = {
 
     server_domain: "http://localhost:3000",
@@ -7,17 +12,31 @@ const state = {
 
 };
 
-// export default {
-//     state: {
-//       recipes: []
-//     },
-//     mutations: {
-//       addRecipe(state, recipe) {
-//         state.recipes.push(recipe);
-//       },
-//       deleteRecipe(state, id) {
-//         state.recipes = state.recipes.filter(recipe => recipe.id !== id);
-//       }
+
+// const state = {
+//   server_domain: "http://localhost:3000",
+//   username: localStorage.getItem('username') || null,
+//   recipes: []
+// };
+
+// const mutations = {
+//   setUsername(state, username) {
+//     state.username = username;
+//     if (username) {
+//       localStorage.setItem('username', username);
+//     } else {
+//       localStorage.removeItem('username');
 //     }
-//   };
-  
+//   },
+//   addRecipe(state, recipe) {
+//     state.recipes.push(recipe);
+//   },
+//   deleteRecipe(state, id) {
+//     state.recipes = state.recipes.filter(recipe => recipe.id !== id);
+//   }
+// };
+
+// export default new Vuex.Store({
+//   state,
+//   mutations
+// });

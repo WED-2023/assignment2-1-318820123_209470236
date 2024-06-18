@@ -13,7 +13,7 @@
       <div class="right-side-container">
         <div class="right-side">
           <template v-if="!$root.store.username">
-            <LoginForm />
+            <LoginForm @login-success="onLoginSuccess" />
           </template>
 
           <template v-else>
@@ -56,6 +56,9 @@ export default {
     fetchRandomRecipes() {
       const response = mockGetRandomRecipes(3);
       this.randomRecipes = response.data.recipes;
+    },
+    onLoginSuccess() {
+      this.fetchLastViewedRecipes();
     }
   },
   mounted() {

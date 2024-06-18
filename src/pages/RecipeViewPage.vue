@@ -12,6 +12,11 @@
               <div class="mb-3">
                 <div>Ready in {{ recipe.readyInMinutes }} minutes</div>
                 <div>Likes: {{ recipe.aggregateLikes }} likes</div>
+                <div class="icons">
+                  <img v-if="recipe.vegetarian" src="@/assets/vegetarian.jpg" alt="Vegetarian" class="icon" v-b-tooltip="'Vegetarian'" />
+                  <img v-if="recipe.vegan" src="@/assets/vegan.jpg" alt="Vegan" class="icon" v-b-tooltip="'Vegan'" />
+                  <img v-if="recipe.glutenFree" src="@/assets/glutenfree.jpg" alt="Gluten Free" class="icon" v-b-tooltip="'Gluten Free'" />
+                </div>
               </div>
               Ingredients:
               <ul>
@@ -30,6 +35,9 @@
             </div>
           </div>
         </div>
+        <div class="status">
+          <img :src="favoriteIcon" alt="Favorite" class="favorite-icon" @click="toggleFavorite" @mouseover="favoriteHover = true" @mouseleave="favoriteHover = false"/>
+        </div>
       </div>
     </div>
   </div>
@@ -41,15 +49,59 @@ import { mockGetRecipeFullDetails } from "../services/recipes.js";
 export default {
   data() {
     return {
-      recipe: null
+      recipe: null,
+      favoriteHover: false
     };
+  },
+  computed: {
+    favoriteIcon() {
+      if (this.favoriteHover || (this.recipe && this.recipe.favorited)) {
+        return require('@/assets/heart_filled.png');
+      } else {
+        return require('@/assets/heart_empty.png');
+      }
+    },
+    isLoggedIn() {
+      return this.$root.store.username;
+    }
+  },
+  methods: {
+    toggleFavorite() {
+      if (!this.isLoggedIn) {
+        alert('Please log in to add favorites');
+        return;
+      }
+      
+      this.recipe.favorited = !this.recipe.favorited;
+      this.updateFavorites();
+    },
+    updateFavorites() {
+      let favorites = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+      if (this.recipe.favorited) {
+        if (!favorites.some(r => r.id === this.recipe.id)) {
+          favorites.push({
+            id: this.recipe.id,
+            title: this.recipe.title,
+            image: this.recipe.image,
+            vegetarian: this.recipe.vegetarian,
+            vegan: this.recipe.vegan,
+            glutenFree: this.recipe.glutenFree,
+            readyInMinutes: this.recipe.readyInMinutes,
+            aggregateLikes: this.recipe.aggregateLikes,
+          });
+        }
+      } else {
+        favorites = favorites.filter(r => r.id !== this.recipe.id);
+      }
+      localStorage.setItem('favoriteRecipes', JSON.stringify(favorites));
+    }
   },
   async created() {
     try {
       const recipeId = this.$route.params.id;
-      const response = mockGetRecipeFullDetails(recipeId);
+      const response = await mockGetRecipeFullDetails(recipeId);
 
-      const { analyzedInstructions, instructions, extendedIngredients, aggregateLikes, readyInMinutes, image, title } = response.data.recipe;
+      const { analyzedInstructions, instructions, extendedIngredients, aggregateLikes, readyInMinutes, image, title, vegetarian, vegan, glutenFree } = response.data.recipe;
 
       const _instructions = analyzedInstructions
         .map(fstep => {
@@ -66,8 +118,16 @@ export default {
         aggregateLikes,
         readyInMinutes,
         image,
-        title
+        title,
+        vegetarian,
+        vegan,
+        glutenFree
       };
+
+      // Load favorite status from local storage
+      const favorites = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+      this.recipe.favorited = favorites.some(r => r.id === this.recipe.id);
+
     } catch (error) {
       console.log(error);
       this.$router.replace("/NotFound");
@@ -89,7 +149,7 @@ export default {
 } 
 .container {
   max-width: 1500px;
-      margin: auto;
+  margin: auto;
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   color: #685555;
   padding: 20px;
@@ -122,5 +182,31 @@ export default {
   margin-left: auto;
   margin-right: auto;
   width: 30%;
+}
+
+.icons {
+  margin-bottom: 10px;
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.favorite-icon {
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+}
+
+.favorite-icon:hover {
+  opacity: 0.7;
+}
+
+.status {
+  margin-top: 20px;
+  text-align: center;
 }
 </style>
