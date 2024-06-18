@@ -12,6 +12,7 @@
               <div class="mb-3">
                 <div>Ready in {{ recipe.readyInMinutes }} minutes</div>
                 <div>Likes: {{ recipe.aggregateLikes }} likes</div>
+                <div>Servings: {{ recipe.servings }}</div>
                 <div class="icons">
                   <img v-if="recipe.vegetarian" src="@/assets/vegetarian.jpg" alt="Vegetarian" class="icon" v-b-tooltip="'Vegetarian'" />
                   <img v-if="recipe.vegan" src="@/assets/vegan.jpg" alt="Vegan" class="icon" v-b-tooltip="'Vegan'" />
@@ -50,7 +51,8 @@ export default {
   data() {
     return {
       recipe: null,
-      favoriteHover: false
+      favoriteHover: false,
+      isLoggedIn: false
     };
   },
   computed: {
@@ -88,6 +90,7 @@ export default {
             glutenFree: this.recipe.glutenFree,
             readyInMinutes: this.recipe.readyInMinutes,
             aggregateLikes: this.recipe.aggregateLikes,
+            servings: this.recipe.servings
           });
         }
       } else {
@@ -101,7 +104,7 @@ export default {
       const recipeId = this.$route.params.id;
       const response = await mockGetRecipeFullDetails(recipeId);
 
-      const { analyzedInstructions, instructions, extendedIngredients, aggregateLikes, readyInMinutes, image, title, vegetarian, vegan, glutenFree } = response.data.recipe;
+      const { analyzedInstructions, instructions, extendedIngredients, aggregateLikes, readyInMinutes, image, title, vegetarian, vegan, glutenFree, servings } = response.data.recipe;
 
       const _instructions = analyzedInstructions
         .map(fstep => {
@@ -121,7 +124,8 @@ export default {
         title,
         vegetarian,
         vegan,
-        glutenFree
+        glutenFree,
+        servings
       };
 
       // Load favorite status from local storage
@@ -137,16 +141,7 @@ export default {
 </script>
 
 <style scoped>
-.background {
-  background-image: url('https://static.vecteezy.com/system/resources/thumbnails/008/660/558/small_2x/organic-food-background-hand-drawn-concept-free-vector.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-} 
+
 .container {
   max-width: 1500px;
   margin: auto;

@@ -1,5 +1,8 @@
 <template>
   <div class="recipe">
+    <div class="favorite-icon-container">
+      <img :src="favoriteIcon" alt="Favorite" class="favorite-icon" @click="toggleFavorite" @mouseover="favoriteHover = true" @mouseleave="favoriteHover = false"/>
+    </div>
     <div class="recipe-content">
       <div class="recipe-details">
         <h2>{{ recipe.title }}</h2>
@@ -16,8 +19,7 @@
         <ol>
           <li v-for="(instruction, index) in recipe.instructions" :key="index">{{ instruction }}</li>
         </ol>
-        <p>number of dishes: {{ recipe.servings }}</p>
-        <img :src="favoriteIcon" alt="Favorite" class="favorite-icon" @click="toggleFavorite" @mouseover="favoriteHover = true" @mouseleave="favoriteHover = false"/>
+        <p>Number of dishes: {{ recipe.servings }}</p>
       </div>
       <img :src="recipe.image" class="recipe-image"/>
     </div>
@@ -65,6 +67,7 @@ export default {
             glutenFree: this.recipe.glutenFree,
             readyInMinutes: this.recipe.readyInMinutes,
             aggregateLikes: this.recipe.aggregateLikes,
+            servings: this.recipe.servings
           });
         }
       } else {
@@ -82,6 +85,7 @@ export default {
 
 <style scoped>
 .recipe {
+  position: relative;
   background: rgba(255, 255, 255, 0.8);
   padding: 20px;
   border-radius: 8px;
@@ -90,6 +94,12 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.favorite-icon-container {
+  position: absolute;
+  top: 20px;
+  left: 20px;
 }
 
 .recipe-content {
