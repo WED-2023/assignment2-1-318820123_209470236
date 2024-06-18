@@ -1,16 +1,16 @@
 /* form-style.scss */
 .background {
-    background-image: url("~@/assets/backGround.jpg");
-    background-size: cover;
-    background-position: center;
-    background-repeat: repeat-y;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-  }
-  
+  background-image: url("~@/assets/backGround.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: repeat-y;
+  min-height: calc(100vh - 60px); // Adjust to fit below the navbar
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; // Align items to the top
+  padding: 20px;
+}
+
 //   .container {
 //     max-width: 1200px; /* או כל גודל אחר שמתאים לך */
 //     margin: 0 auto;

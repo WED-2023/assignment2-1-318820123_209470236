@@ -14,9 +14,21 @@
     <div class="recipe-content">
       <h3 class="recipe-title">{{ recipe.title }}</h3>
       <div class="icons">
-        <img v-if="recipe.vegetarian" src="@/assets/vegetarian.jpg" alt="Vegetarian" class="icon" />
-        <img v-if="recipe.vegan" src="@/assets/vegan.jpg" alt="Vegan" class="icon" />
-        <img v-if="recipe.glutenFree" src="@/assets/glutenfree.jpg" alt="Gluten Free" class="icon" />
+        <img v-if="recipe.vegetarian" 
+             src="@/assets/vegetarian.jpg" 
+             alt="Vegetarian" 
+             class="icon" 
+             v-b-tooltip="'Vegetarian'" />
+        <img v-if="recipe.vegan" 
+             src="@/assets/vegan.jpg" 
+             alt="Vegan" 
+             class="icon" 
+             v-b-tooltip="'Vegan'" />
+        <img v-if="recipe.glutenFree" 
+             src="@/assets/glutenfree.jpg" 
+             alt="Gluten Free" 
+             class="icon" 
+             v-b-tooltip="'Gluten Free'" />
       </div>
       <p class="recipe-meta">
         <strong>Preparation time:</strong> {{ recipe.readyInMinutes }} minutes<br>
@@ -144,9 +156,10 @@ export default {
 }
 
 .icon {
-  width: 32px; /* Adjust the size of the icons */
-  height: 32px;
+  width: 40px; /* Adjust the size of the icons */
+  height: 40px;
   margin: 0 5px;
+  cursor: pointer;
 }
 
 .recipe-meta {

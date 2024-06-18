@@ -13,10 +13,7 @@
       <div class="right-side-container">
         <div class="right-side">
           <template v-if="!$root.store.username">
-            <div class="guest-section">
-              <button @click="goToLogin" class="login">Click To Login</button>
-              <button @click="goToRegister" class="register">Click To Register</button>
-            </div>
+            <LoginForm />
           </template>
 
           <template v-else>
@@ -34,10 +31,12 @@
 <script>
 import { mockGetLastViewedRecipes, mockGetRandomRecipes } from "@/services/recipes";
 import RecipePreviewList from "@/components/RecipePreviewList.vue";
+import LoginForm from "@/components/LoginForm.vue";
 
 export default {
   components: {
-    RecipePreviewList
+    RecipePreviewList,
+    LoginForm
   },
   data() {
     return {
@@ -48,12 +47,6 @@ export default {
     };
   },
   methods: {
-    goToLogin() {
-      this.$router.push({ name: 'login' });
-    },
-    goToRegister() {
-      this.$router.push({ name: 'register' });
-    },
     fetchLastViewedRecipes() {
       if (this.$root.store.username) {
         const response = mockGetLastViewedRecipes(3);
@@ -73,17 +66,6 @@ export default {
 </script>
 
 <style scoped>
-/* .background {
-  background-image: url("https://static.vecteezy.com/system/resources/thumbnails/008/660/558/small_2x/organic-food-background-hand-drawn-concept-free-vector.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-} */
 .container {
   display: flex;
   justify-content: space-between;
@@ -104,7 +86,7 @@ export default {
   padding: 20px;
 }
 .container-title {
-  font-size: 1.8rem;
+  font-size: 2.0rem;
   font-weight: bold;
   margin-bottom: 20px;
   text-align: center;

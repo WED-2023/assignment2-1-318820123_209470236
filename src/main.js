@@ -5,6 +5,11 @@ import axios from "axios";
 
 import routes from "./routes";
 import VueRouter from "vue-router";
+import 'bootstrap/dist/css/bootstrap.css'
+import BootstrapVue from 'bootstrap-vue'
+
+Vue.use(BootstrapVue)
+
 Vue.use(VueRouter);
 const router = new VueRouter({
   routes,
@@ -38,6 +43,7 @@ import {
   LayoutPlugin,
 ].forEach((x) => Vue.use(x));
 Vue.use(Vuelidate);
+
 
 axios.interceptors.request.use(
   function(config) {
