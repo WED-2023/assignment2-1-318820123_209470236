@@ -86,14 +86,19 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #6c4e3c;
   min-height: 100vh;
+  padding-top: 70px; 
 }
 
 /* Navigation bar styling */
 #nav {
   padding: 20px;
   background-color: rgb(85, 73, 48); /* Background color for the navigation bar */
+  position: fixed; /* Make the navbar fixed */
+  top: 0; /* Position it at the top */
+  left: 0; /* Align it to the left */
+  width: 100%; /* Stretch it across the entire width */
+  z-index: 1000; /* Ensure it stays above other content */
 }
-
 /* Navigation links and user info styling */
 #nav a, 
 #nav .nav-user span, 
