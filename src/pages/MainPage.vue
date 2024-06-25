@@ -3,22 +3,23 @@
     <div class="container">
       <div class="left-side-container">
         <div class="left-side">
-          <RecipePreviewList title="Random Recipes" :recipes="randomRecipes" :amountToShow="numRandomRecipes" />
-          <button @click="fetchRandomRecipes" class="form-button-custom">Get New Recipes</button>
+          <h2 class="container-title">Random Recipes</h2>
+          <RecipePreviewList :recipes="randomRecipes" :amountToShow="numRandomRecipes" />
+          <div class="button-container">
+            <button @click="fetchRandomRecipes" class="form-button-custom">Get New Recipes</button>
+          </div>
         </div>
       </div>
       <div class="right-side-container">
         <div class="right-side">
           <template v-if="!$root.store.username">
-            <div class="guest-section">
-              <button @click="goToLogin" class="login">Click To Login</button>
-              <button @click="goToRegister" class="register">Click To Register</button>
-            </div>
+            <LoginForm @login-success="onLoginSuccess" />
           </template>
 
           <template v-else>
             <div class="user-section">
-              <RecipePreviewList title="Last Viewed Recipes" :recipes="lastViewedRecipes" :amountToShow="numLastViewedRecipes" />
+              <h2 class="container-title">Last Viewed Recipes</h2>
+              <RecipePreviewList :recipes="lastViewedRecipes" :amountToShow="numLastViewedRecipes" />
             </div>
           </template>
         </div>
@@ -28,12 +29,14 @@
 </template>
 
 <script>
-import { mockGetLastViewedRecipes, mockGetRecipesPreview } from "@/services/recipes";
+import { mockGetLastViewedRecipes, mockGetRandomRecipes } from "@/services/recipes";
 import RecipePreviewList from "@/components/RecipePreviewList.vue";
+import LoginForm from "@/components/LoginForm.vue";
 
 export default {
   components: {
-    RecipePreviewList
+    RecipePreviewList,
+    LoginForm
   },
   data() {
     return {
@@ -44,21 +47,18 @@ export default {
     };
   },
   methods: {
-    goToLogin() {
-      this.$router.push({ name: 'login' });
-    },
-    goToRegister() {
-      this.$router.push({ name: 'register' });
-    },
     fetchLastViewedRecipes() {
       if (this.$root.store.username) {
-        const response = mockGetLastViewedRecipes();
+        const response = mockGetLastViewedRecipes(3);
         this.lastViewedRecipes = response.data.recipes;
       }
     },
     fetchRandomRecipes() {
-      const response = mockGetRecipesPreview(3);
+      const response = mockGetRandomRecipes(3);
       this.randomRecipes = response.data.recipes;
+    },
+    onLoginSuccess() {
+      this.fetchLastViewedRecipes();
     }
   },
   mounted() {
@@ -69,22 +69,13 @@ export default {
 </script>
 
 <style scoped>
-.background {
-  background-image: url("https://static.vecteezy.com/system/resources/thumbnails/008/660/558/small_2x/organic-food-background-hand-drawn-concept-free-vector.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-}
+@import "@/scss/form-style.scss";
+
 .container {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1700px;
   gap: 20px; /* Added gap for better spacing */
   flex-wrap: nowrap; /* Ensure no wrapping */
 }
@@ -98,6 +89,13 @@ export default {
 }
 .left-side, .right-side {
   padding: 20px;
+}
+.container-title {
+  font-size: 2.0rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #6c4e3c; /* Adjust the color to match your theme */
 }
 .guest-section {
   display: flex;
@@ -123,5 +121,18 @@ export default {
   background-color: #dbcbb3;
   border: 3px solid #6c4e3c;
   color: #6c4e3c;
+  cursor: pointer; /* Adds pointer cursor on hover */
+  transition: background-color 0.3s, color 0.3s; /* Smooth transition for hover effect */
+}
+
+.form-button-custom:hover {
+  background-color: #6c4e3c;
+  color: #dbcbb3;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center; /* Centers the button horizontally */
+  margin-top: 20px; /* Adjust as needed for vertical spacing */
 }
 </style>

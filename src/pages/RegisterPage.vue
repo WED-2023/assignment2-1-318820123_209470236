@@ -216,7 +216,7 @@ export default {
 </script>
 
 <style scoped>
-.background {
+/* .background {
   background-image: url('https://static.vecteezy.com/system/resources/thumbnails/008/660/558/small_2x/organic-food-background-hand-drawn-concept-free-vector.jpg ');
   background-size: cover;
   background-position: center;
@@ -225,10 +225,11 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-}
+} */
 
 
 .container {
+  margin-top: 100px;
   width: 700px; /* Width of the container */
   height: 550px;
   background-color: rgb(168, 153, 121);

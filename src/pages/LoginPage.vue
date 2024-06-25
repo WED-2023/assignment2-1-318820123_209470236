@@ -1,75 +1,75 @@
 <template>
   <div class="background">
-    <div class="container custom-font">
-      <h1 class="title">Login</h1>
-      <b-form @submit.prevent="onLogin">
-        <b-form-group
-          id="input-group-Username"
-          label-cols-sm="3"
-          label="Username:"
-          label-for="Username"
-          class="form-group-custom"
-        >
-          <b-form-input
-            id="Username"
-            v-model="$v.form.username.$model"
-            type="text"
-            :state="validateState('username')"
-            class="form-input-custom"
-          ></b-form-input>
-          <b-form-invalid-feedback>
-            Username is required
-          </b-form-invalid-feedback>
-        </b-form-group>
-
-        <b-form-group
-          id="input-group-Password"
-          label-cols-sm="3"
-          label="Password:"
-          label-for="Password"
-          class="form-group-custom"
-        >
-          <b-form-input
-            id="Password"
-            type="password"
-            v-model="$v.form.password.$model"
-            :state="validateState('password')"
-            class="form-input-custom"
-          ></b-form-input>
-          <b-form-invalid-feedback>
-            Password is required
-          </b-form-invalid-feedback>
-        </b-form-group>
-
-        <b-button
-          type="submit"
-          variant="primary"
-          class="mx-auto w-100 form-button-custom"
-          >Login</b-button
-        >
-        <div class="mt-2">
-          Do not have an account yet?
-          <router-link to="register" class="login-link"> Register in here</router-link>
-        </div>
-      </b-form>
-      <b-alert
-        class="mt-2"
-        v-if="form.submitError"
-        variant="warning"
-        dismissible
-        show
+  <div class="login-container">
+    <h1 class="title">Login</h1>
+    <b-form @submit.prevent="onLogin">
+      <b-form-group
+        id="input-group-Username"
+        label="Username:"
+        label-for="Username"
+        class="form-group-custom"
       >
-        Login failed: {{ form.submitError }}
-      </b-alert>
-    </div>
+        <b-form-input
+          id="Username"
+          v-model="$v.form.username.$model"
+          type="text"
+          :state="validateState('username')"
+          class="form-input-custom"
+        ></b-form-input>
+        <b-form-invalid-feedback>
+          Username is required
+        </b-form-invalid-feedback>
+      </b-form-group>
+
+      <b-form-group
+        id="input-group-Password"
+        label="Password:"
+        label-for="Password"
+        class="form-group-custom"
+      >
+        <b-form-input
+          id="Password"
+          type="password"
+          v-model="$v.form.password.$model"
+          :state="validateState('password')"
+          class="form-input-custom"
+        ></b-form-input>
+        <b-form-invalid-feedback>
+          Password is required
+        </b-form-invalid-feedback>
+      </b-form-group>
+
+      <b-button
+        type="submit"
+        variant="primary"
+        class="form-button-custom"
+        >Login</b-button
+      >
+      <div class="mt-2">
+        Do not have an account yet?
+        <router-link to="register" class="login-link"> Register in here</router-link>
+      </div>
+    </b-form>
+    <b-alert
+      class="mt-2"
+      v-if="form.submitError"
+      variant="warning"
+      dismissible
+      show
+    >
+      Login failed: {{ form.submitError }}
+    </b-alert>
   </div>
+</div>
+
 </template>
 
 <script>
 import { required } from "vuelidate/lib/validators";
 import { mockLogin } from "../services/auth.js";
+
 export default {
-  name: "Login",
+  name: "LoginForm",
   data() {
     return {
       form: {
@@ -96,78 +96,45 @@ export default {
     },
     async Login() {
       try {
-        // const response = await this.axios.post(
-        //   this.$root.store.server_domain +"/Login",
-
-        //   {
-        //     username: this.form.username,
-        //     password: this.form.password
-        //   }
-        // );
-
         const success = true; // modify this to test the error handling
         const response = mockLogin(this.form.username, this.form.password, "success");
 
-        // console.log(response);
-        // this.$root.loggedIn = true;
-        console.log(this.$root.store.login);
         this.$root.store.login(this.form.username);
         this.$router.push("/");
       } catch (err) {
-        console.log(err.response);
         this.form.submitError = err.response.data.message;
       }
     },
 
     onLogin() {
-      // console.log("login method called");
       this.form.submitError = undefined;
       this.$v.form.$touch();
       if (this.$v.form.$anyError) {
         return;
       }
-      // console.log("login method go");
-
       this.Login();
     }
   }
 };
 </script>
 
-<style lang="scss" scoped>
-.background {
-  background-image: url('https://static.vecteezy.com/system/resources/thumbnails/008/660/558/small_2x/organic-food-background-hand-drawn-concept-free-vector.jpg ');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.container {
-  width: 700px; /* Width of the container */
-  height: 400px; /* Height of the container */
-  background: rgb(168, 153, 121); /* Pink and red gradient background */
-  padding: 40px; /* Increase padding */
+<style scoped>
+.login-container {
+  margin-top: 100px;
+  background: rgb(168, 153, 121);
+  padding: 40px;
   border-radius: 25px;
   box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1);
-  font-size: 1.55rem; /* Increase font size */
-}
-
-.custom-font {
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
- font-size: 1.55rem;
+  font-size: 1.55rem;
+  width: 800px; /* Make sure the container takes the full width of its parent */
 }
 
 .title {
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   text-align: center;
-  margin-bottom: 30px; 
-  font-size: 2.85rem; 
+  margin-bottom: 30px;
+  font-size: 2.85rem;
   color: #333;
-
 }
 
 .form-group-custom {
@@ -176,17 +143,18 @@ export default {
 
 .form-input-custom {
   border-radius: 8px;
-  font-size: 1.55rem; 
-  padding: 10px; 
+  font-size: 1.55rem;
+  padding: 10px;
 }
 
 .form-button-custom {
-  font-size: 1.55rem; 
+  font-size: 1.55rem;
   padding: 10px 20px;
   border-radius: 11px;
   background-color: #dbcbb3;
-  border: 3px solid #6c4e3c; 
+  border: 3px solid #6c4e3c;
   color: #6c4e3c;
+  width: 100%; /* Make sure the button takes the full width of the form */
 }
 
 .login-link {
@@ -197,5 +165,4 @@ export default {
 .login-link:hover {
   text-decoration: underline;
 }
-
 </style>

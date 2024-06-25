@@ -1,124 +1,50 @@
-<!-- <template>
-  <div class="recipe-preview">
-    <img :src="recipe.image" alt="Recipe Image" class="recipe-image" />
-    <div class="recipe-content">
-      <h3 class="recipe-title">{{ recipe.title }}</h3>
-      <p class="recipe-description">{{ recipe.description }}</p>
-      <p class="recipe-meta">
-        <strong>Published on:</strong> {{ recipe.date }}<br>
-        <strong>Time:</strong> {{ recipe.time }}
-      </p>
-      <button @click="viewRecipe" class="recipe-button">View Recipe</button>
-      <button @click="$emit('delete-recipe', recipe)" class="delete-button">Delete</button>
-    </div>
-  </div>
-</template>
-
-<script>
-export default {
-  name: "RecipePreview",
-  props: {
-    recipe: {
-      type: Object,
-      required: true
-    }
-  },
-  methods: {
-    viewRecipe() {
-      this.$router.push({ name: 'recipe', params: { id: this.recipe.id } });
-    }
-  }
-};
-</script>
-
-<style scoped>
-.recipe-preview {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 10px;
-  margin-bottom: 20px;
-  max-width: 200px; /* Max width added */
-}
-
-.recipe-image {
-  width: 100%;
-  height: auto;
-  border-radius: 22px;
-  max-height: 100px; /* Max height added */
-}
-
-.recipe-content {
-  padding: 5px;
-  text-align: center;
-}
-
-.recipe-title {
-  font-size: 16px; /* Font size reduced */
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 5px;
-}
-
-.recipe-description {
-  font-size: 12px; /* Font size reduced */
-  color: #555;
-  margin-bottom: 5px;
-}
-
-.recipe-meta {
-  font-size: 10px; /* Font size reduced */
-  color: #777;
-  margin-bottom: 5px;
-}
-
-.recipe-button {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #c8a65d;
-  color: white;
-  text-decoration: none;
-  border-radius: 22px;
-  font-size: 15px; /* Font size reduced */
-  border: 2px solid white; /* To make it more button-like */
-}
-
-.recipe-button:hover {
-  background-color: #c8a65d;
-  color: white;
-}
-
-.delete-button {
-  display: inline-block;
-  padding: 5px 10px;
-  background-color: #ff4d4d;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  margin-top: 10px;
-}
-
-.delete-button:hover {
-  background-color: #cc0000;
-}
-</style> -->
-
-
 <template>
   <div class="recipe-preview">
-    <img :src="recipe.image" alt="Recipe Image" class="recipe-image" />
+    <div 
+      class="recipe-image-container"
+      @click="viewRecipe"
+      @mouseover="hover = true"
+      @mouseleave="hover = false"
+    >
+      <img :src="recipe.image" alt="Recipe Image" class="recipe-image" />
+      <div v-if="hover" class="overlay">
+        <span>Click to view</span>
+      </div>
+    </div>
     <div class="recipe-content">
       <h3 class="recipe-title">{{ recipe.title }}</h3>
-      <p class="recipe-description">{{ recipe.description }}</p>
+      <div class="icons">
+        <img v-if="recipe.vegetarian" 
+             src="@/assets/vegetarian.jpg" 
+             alt="Vegetarian" 
+             class="icon" 
+             v-b-tooltip="'Vegetarian'" />
+        <img v-if="recipe.vegan" 
+             src="@/assets/vegan.jpg" 
+             alt="Vegan" 
+             class="icon" 
+             v-b-tooltip="'Vegan'" />
+        <img v-if="recipe.glutenFree" 
+             src="@/assets/glutenfree.jpg" 
+             alt="Gluten Free" 
+             class="icon" 
+             v-b-tooltip="'Gluten Free'" />
+      </div>
       <p class="recipe-meta">
-        <strong>Published on:</strong> {{ recipe.date }}<br>
-        <strong>Time:</strong> {{ recipe.time }}
+        <strong>Preparation time:</strong> {{ recipe.readyInMinutes }} minutes<br>
+        <strong>Likes:</strong> {{ recipe.aggregateLikes }}
       </p>
-      <button @click="viewRecipe" class="recipe-button">View Recipe</button>
-      <button v-if="showDeleteButton" @click="deleteRecipe" class="delete-button">Delete</button>
+      <div class="status">
+        <span v-if="recipe.viewed" class="viewed">Viewed</span>
+        <img 
+          :src="favoriteIcon" 
+          alt="Favorite" 
+          class="favorite-icon" 
+          @click="toggleFavorite" 
+          @mouseover="favoriteHover = true"
+          @mouseleave="favoriteHover = false"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -130,18 +56,50 @@ export default {
     recipe: {
       type: Object,
       required: true
+    }
+  },
+  data() {
+    return {
+      hover: false,
+      favoriteHover: false
+    };
+  },
+  computed: {
+    favoriteIcon() {
+      if (this.favoriteHover || this.recipe.favorited) {
+        return require('@/assets/heart_filled.png');
+      } else {
+        return require('@/assets/heart_empty.png');
+      }
     },
-    showDeleteButton: {
-      type: Boolean,
-      default: false
+    isLoggedIn() {
+      return this.$root.store.username;
     }
   },
   methods: {
     viewRecipe() {
       this.$router.push({ name: 'recipe', params: { id: this.recipe.id } });
     },
-    deleteRecipe() {
-      this.$emit('delete-recipe', this.recipe);
+    toggleFavorite() {
+      if (!this.isLoggedIn) {
+        alert('Please log in to add favorites');
+        return;
+      }
+      
+      this.recipe.favorited = !this.recipe.favorited;
+      this.updateFavorites();
+      this.$emit('toggle-favorite', this.recipe);
+    },
+    updateFavorites() {
+      let favorites = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+      if (this.recipe.favorited) {
+        if (!favorites.some(r => r.id === this.recipe.id)) {
+          favorites.push(this.recipe);
+        }
+      } else {
+        favorites = favorites.filter(r => r.id !== this.recipe.id);
+      }
+      localStorage.setItem('favoriteRecipes', JSON.stringify(favorites));
     }
   }
 };
@@ -157,76 +115,85 @@ export default {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 10px;
   margin-bottom: 20px;
-  max-width: 200px; /* Max width added */
-  max-width: 200px; /* Max width added */
+  max-width: 300px; /* Max width added */
+}
+
+.recipe-image-container {
+  position: relative;
+  cursor: pointer;
 }
 
 .recipe-image {
+  width: 300px; /* Fixed width */
+  height: 200px; /* Fixed height */
+  object-fit: cover; /* Maintain aspect ratio and cover the container */
+  border-radius: 8px;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
   width: 100%;
-  height: auto;
-  border-radius: 22px;
-  max-height: 100px; /* Max height added */
-  border-radius: 22px;
-  max-height: 100px; /* Max height added */
+  opacity: 0.8;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
 }
 
 .recipe-content {
-  padding: 5px;
+  padding: 10px;
   text-align: center;
 }
 
 .recipe-title {
-  font-size: 16px; /* Font size reduced */
-  font-size: 16px; /* Font size reduced */
+  font-size: 18px; /* Font size increased */
   font-weight: bold;
   color: #333;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
-.recipe-description {
-  font-size: 12px; /* Font size reduced */
-  font-size: 12px; /* Font size reduced */
-  color: #555;
-  margin-bottom: 5px;
+.icons {
+  margin-bottom: 10px;
+}
+
+.icon {
+  width: 40px; /* Adjust the size of the icons */
+  height: 40px;
+  margin: 0 5px;
+  cursor: pointer;
 }
 
 .recipe-meta {
-  font-size: 10px; /* Font size reduced */
-  font-size: 10px; /* Font size reduced */
+  font-size: 14px;
   color: #777;
+  margin-bottom: 10px;
+}
+
+.status {
+  margin-bottom: 10px;
+}
+
+.viewed {
+  display: block;
+  color: green;
+  font-size: 14px;
   margin-bottom: 5px;
 }
 
-
-.recipe-button {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #c8a65d;
-  padding: 10px 20px;
-  background-color: #c8a65d;
-  color: white;
-  text-decoration: none;
-  border-radius: 22px;
-  font-size: 15px; /* Font size reduced */
-  border: 2px solid white; /* To make it more button-like */
+.favorite-icon {
+  width: 32px; /* Adjust the size of the favorite icon */
+  height: 32px;
+  cursor: pointer;
 }
 
-.recipe-button:hover {
-  background-color: #c8a65d;
-  color: white;
-}
-
-.delete-button {
-  display: inline-block;
-  padding: 5px 10px;
-  background-color: #ff4d4d;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  margin-top: 10px;
-}
-
-.delete-button:hover {
-  background-color: #cc0000;
+.favorite-icon:hover {
+  opacity: 0.7;
 }
 </style>

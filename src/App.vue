@@ -13,7 +13,7 @@
         </template>
         <!-- Show Add New Recipe and Personal Area dropdown if user is logged in -->
         <template v-else>
-          <b-nav-item :to="{ name: 'addNewRecipes' }">Add new recipe</b-nav-item>
+          <b-nav-item @click="showNewRecipeModal">Add new recipe</b-nav-item>
           <b-nav-item-dropdown text="Personal Area" right>
             <b-dropdown-item :to="{ name: 'favorites' }">My favorite recipes</b-dropdown-item>
             <b-dropdown-item :to="{ name: 'myRecipes' }">My recipes</b-dropdown-item>
@@ -39,12 +39,24 @@
       </div>
     </div>
     <router-view />
+    <!-- Add New Recipe Modal -->
+    <NewRecipe v-if="isModalVisible" @close="hideNewRecipeModal"/>
   </div>
 </template>
 
 <script>
+import NewRecipe from './components/NewRecipe.vue';
+
 export default {
   name: "App",
+  components: {
+    NewRecipe
+  },
+  data() {
+    return {
+      isModalVisible: false
+    };
+  },
   methods: {
     // Logout method
     Logout() {
@@ -53,6 +65,12 @@ export default {
       this.$router.push("/").catch(() => {
         this.$forceUpdate();
       });
+    },
+    showNewRecipeModal() {
+      this.isModalVisible = true;
+    },
+    hideNewRecipeModal() {
+      this.isModalVisible = false;
     }
   }
 };
@@ -66,16 +84,21 @@ export default {
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #000000;
+  color: #6c4e3c;
   min-height: 100vh;
+  padding-top: 70px; 
 }
 
 /* Navigation bar styling */
 #nav {
-  padding: 30px;
+  padding: 20px;
   background-color: rgb(85, 73, 48); /* Background color for the navigation bar */
+  position: fixed; /* Make the navbar fixed */
+  top: 0; /* Position it at the top */
+  left: 0; /* Align it to the left */
+  width: 100%; /* Stretch it across the entire width */
+  z-index: 1000; /* Ensure it stays above other content */
 }
-
 /* Navigation links and user info styling */
 #nav a, 
 #nav .nav-user span, 
@@ -143,6 +166,6 @@ export default {
 
 /* User icon styling */
 .user-icon {
-  margin-left: 10px; /* Space between username and user icon */
+  margin-left: 10px; /* Space between username and user icon */
 }
 </style>
