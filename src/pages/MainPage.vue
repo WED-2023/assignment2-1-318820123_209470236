@@ -78,7 +78,6 @@ export default {
   max-width: 1700px;
   gap: 20px; /* Added gap for better spacing */
   flex-wrap: nowrap; /* Ensure no wrapping */
-  min-height: 550px; 
 }
 .left-side-container, .right-side-container {
   background-color: rgba(255, 255, 255, 0.8);
