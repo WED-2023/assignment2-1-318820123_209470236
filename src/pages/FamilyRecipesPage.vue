@@ -27,6 +27,7 @@ export default {
         {
           title: "Kahi (קאאי)",
           image: require('@/assets/kahi.jpg'),
+          familyDetails: "My grandmother would prepare it the morning after the eve of Shavuot and all the family members would come to her to taste this food. We would wait all year to eat it and it is a traditional Iraqi dish.",
           ingredients: [
             "1 kg flour",
             "5 tablespoons oil",
@@ -46,6 +47,7 @@ export default {
         },
         {
           title: "Beef Patties with Potatoes",
+          familyDetails: "M",
           ingredients: [
             "500g ground beef",
             "1 large onion, chopped",
@@ -66,6 +68,7 @@ export default {
         },
         {
           title: "Pasta with Tomato and Basil Sauce",
+          familyDetails: "M",
           ingredients: [
             "500g penne pasta",
             "2 tablespoons olive oil",
@@ -88,6 +91,7 @@ export default {
         },
         {
           title: "Baked Cheesecake",
+          familyDetails: "M",
           ingredients: [
             "500g cream cheese",
             "1 cup sugar",
