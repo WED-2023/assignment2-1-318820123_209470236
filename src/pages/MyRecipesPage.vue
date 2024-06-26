@@ -8,7 +8,7 @@
             :recipe="recipe"
             @toggle-favorite="toggleFavorite"
           />
-          <button @click="deleteRecipe(recipe)" class="delete-button">Delete</button>
+          <button @click="deleteRecipe(recipe)" class="delete-button">&times;</button>
         </div>
       </div>
     </div>
@@ -53,29 +53,25 @@ export default {
 </script>
 
 <style scoped>
-.background {
-  background-image: url("https://static.vecteezy.com/system/resources/thumbnails/008/660/558/small_2x/organic-food-background-hand-drawn-concept-free-vector.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start; /* Aligns the container to the top */
-  padding: 20px;
-}
 
 .container {
-  padding: 20px;
+  /* padding: 20px;
   background-color: rgba(255, 255, 255, 0.9);
   border-radius: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 80%; /* Adjusts the width of the container */
-  max-width: 1200px; /* Maximum width of the container */
-  margin-top: 20px; /* Adjust the margin to move it closer to the top */
+  width: 90%;
+  max-width: 1200px;
+  height: 90vh;
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centers the content horizontally */
+  align-items: center; */
+
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 30px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .title {
@@ -88,27 +84,27 @@ export default {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  justify-content: flex-start; /* Aligns the recipe previews to the left */
+  justify-content: center; /* Centers the recipe previews */
   width: 100%;
 }
 
 .recipe-wrapper {
   position: relative;
+  width: 300px; /* Set a fixed width for the recipe preview */
 }
 
 .delete-button {
   position: absolute;
   top: 10px;
-  right: 10px;
-  padding: 5px 10px;
-  background-color: #ff4d4d;
-  color: white;
+  right: 265px;
+  background-color: transparent;
+  color: #463333;
   border: none;
-  border-radius: 4px;
+  font-size: 20px;
   cursor: pointer;
 }
 
 .delete-button:hover {
-  background-color: #cc0000;
+  color:  #aaa;
 }
 </style>
