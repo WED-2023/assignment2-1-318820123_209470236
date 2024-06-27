@@ -86,8 +86,9 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #6c4e3c;
   min-height: 100vh;
-  padding-top: 70px; 
+  padding-top: 100px; /* הגדרת padding-top ל-100px */
 }
+
 
 /* Navigation bar styling */
 #nav {

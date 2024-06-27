@@ -97,6 +97,7 @@ export default {
   }
 };
 </script>
+
 <style scoped>
 @import "@/scss/form-style.scss";
 
@@ -107,15 +108,11 @@ export default {
   position: fixed;
   z-index: 1;
   left: 0;
-  top: 0; /* הגדרת top ל-0 */
+  top: 40px;
   width: 100%;
   height: 100%;
   overflow: auto;
   background-color: rgba(0, 0, 0, 0.4);
-  padding-bottom: 20px; /* הוספת padding-top */
-  padding-top: 180px; /* הוספת padding-top */
-
-
 }
 
 .modal-content {
@@ -123,12 +120,9 @@ export default {
   padding: 30px;
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 70%;
+  width: 80%;
   max-width: 700px;
-  max-height: 90vh; /* הוספת מגבלת גובה */
-  overflow-y: auto; /* הוספת גלילה אנכית במידת הצורך */
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-  margin-top: 20px; /* הוספת margin-top כדי ליצור רווח בין ה-bar לקומפוננטה */
 }
 
 .close {
@@ -148,8 +142,8 @@ export default {
 h2 {
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
   text-align: center;
-  margin-bottom: 20px; /* הקטנת ה-margin-bottom */
-  font-size: 2.5rem; /* הקטנת גודל הפונט */
+  margin-bottom: 30px;
+  font-size: 2.85rem;
   font-weight: bold;
   color: #6c4e3c;
 }
@@ -164,14 +158,14 @@ form {
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-bottom: 10px; /* הקטנת margin-bottom */
+  margin-bottom: 15px;
   width: 100%; /* Full width */
 }
 
 .form-group label {
   width: 30%;
   text-align: left;
-  font-size: 1.2rem; /* הקטנת גודל הפונט */
+  font-size: 1.3rem;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
   margin-left: auto; /* Align to the right */
 }
@@ -180,15 +174,15 @@ form {
 .form-group textarea {
   width: 70%;
   margin-left: 10px; /* Add some space between label and input */
-  padding: 8px; /* הקטנת padding */
+  padding: 10px;
   box-sizing: border-box;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
   border-radius: 10px;
-  border: 2px solid #5c4b4b; /* הקטנת רוחב הגבול */
+  border: 3px solid #5c4b4b;
 }
 
 .form-group textarea {
-  height: 80px; /* הקטנת הגובה */
+  height: 100px;
 }
 
 .dietary-group {
@@ -199,7 +193,7 @@ form {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  gap: 10px; /* הקטנת gap */
+  gap: 20px; /* Added gap for better spacing */
   width: 70%;
   margin-left: 10px;
 }
@@ -215,7 +209,7 @@ form {
   width: 45%;
   padding: 8px;
   border-radius: 8px;
-  font-size: 1.2rem; /* הקטנת גודל הפונט */
+  font-size: 1.5rem;
   background-color: #dbcbb3 !important;
   border: 2px solid #6c4e3c !important; 
   color: #6c4e3c !important;
