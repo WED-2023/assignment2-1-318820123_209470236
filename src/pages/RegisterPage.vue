@@ -28,6 +28,27 @@
         </b-form-group>
 
         <b-form-group
+          id="input-group-email"
+          label-cols-sm="3"
+          label="Email:"
+          label-for="email"
+        >
+          <b-form-input
+            id="email"
+            v-model="$v.form.email.$model"
+            type="email"
+            :state="validateState('email')"
+            class="form-input"
+          ></b-form-input>
+          <b-form-invalid-feedback v-if="!$v.form.email.required">
+            Email is required
+          </b-form-invalid-feedback>
+          <b-form-invalid-feedback v-else-if="!$v.form.email.email">
+            Email must be valid
+          </b-form-invalid-feedback>
+        </b-form-group>
+
+        <b-form-group
           id="input-group-country"
           label-cols-sm="3"
           label="Country:"
@@ -125,6 +146,7 @@ import {
   maxLength,
   alpha,
   sameAs,
+  email
 } from "vuelidate/lib/validators";
 import { mockRegister } from "../services/auth.js";
 export default {
@@ -152,6 +174,10 @@ export default {
         required,
         length: (u) => minLength(3)(u) && maxLength(8)(u),
         alpha
+      },
+      email: {
+        required,
+        email
       },
       country: {
         required
