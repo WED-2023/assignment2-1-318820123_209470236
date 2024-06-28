@@ -1,17 +1,15 @@
 <template>
   <div id="app">
     <div id="nav" class="d-flex justify-content-between align-items-center nav-custom">
-      <!-- Navigation links -->
       <b-nav pills class="flex-grow-1 nav-links">
         <b-nav-item :to="{ name: 'main' }">Vue Recipes</b-nav-item>
         <b-nav-item :to="{ name: 'search' }">Search</b-nav-item>
         <b-nav-item :to="{ name: 'about' }">About</b-nav-item>
-        <!-- Show Register/Login if user is not logged in -->
+        
         <template v-if="!$root.store.username">
           <b-nav-item :to="{ name: 'register' }">Register</b-nav-item>
           <b-nav-item :to="{ name: 'login' }">Login</b-nav-item>
         </template>
-        <!-- Show Add New Recipe and Personal Area dropdown if user is logged in -->
         <template v-else>
           <b-nav-item @click="showNewRecipeModal">Add new recipe</b-nav-item>
           <b-nav-item-dropdown text="Personal Area" right>
@@ -19,15 +17,16 @@
             <b-dropdown-item :to="{ name: 'myRecipes' }">My recipes</b-dropdown-item>
             <b-dropdown-item :to="{ name: 'familyRecipes' }">My family recipes</b-dropdown-item>
           </b-nav-item-dropdown>
+          <b-nav-item :to="{ name: 'mealPlanning' }" class="position-relative" v-b-tooltip.hover title="Meal Planning">
+            <img src="@/assets/chef.png" alt="Meal Planning" class="chef-icon">
+            <span class="badge badge-pill custom-badge">{{ mealCount }}</span>
+          </b-nav-item>
         </template>
       </b-nav>
-      <!-- User greeting and logout button -->
       <div class="nav-user d-flex align-items-center">
-        <!-- Show "Hello Guest!" if user is not logged in -->
         <template v-if="!$root.store.username">
           <span>Hello Guest!</span>
         </template>
-        <!-- Show logout button and username if user is logged in -->
         <template v-else>
           <b-nav-item @click="Logout" class="nav-link logout-button">Logout</b-nav-item>
           <span class="separator"></span>
@@ -38,8 +37,7 @@
         </template>
       </div>
     </div>
-    <router-view />
-    <!-- Add New Recipe Modal -->
+    <router-view @add-to-meal-planning="addToMealPlanning" @remove-from-meal-planning="removeFromMealPlanning" />
     <NewRecipe v-if="isModalVisible" @close="hideNewRecipeModal"/>
   </div>
 </template>
@@ -54,11 +52,12 @@ export default {
   },
   data() {
     return {
-      isModalVisible: false
+      isModalVisible: false,
+      mealCount: 0,
+      plannedRecipes: []
     };
   },
   methods: {
-    // Logout method
     Logout() {
       this.$root.store.logout();
       this.$root.toast("Logout", "User logged out successfully", "success");
@@ -71,7 +70,24 @@ export default {
     },
     hideNewRecipeModal() {
       this.isModalVisible = false;
+    },
+    addToMealPlanning(recipe) {
+      if (!this.plannedRecipes.some(r => r.id === recipe.id)) {
+        this.plannedRecipes.push(recipe);
+        this.mealCount = this.plannedRecipes.length;
+        localStorage.setItem('plannedRecipes', JSON.stringify(this.plannedRecipes));
+      }
+    },
+    removeFromMealPlanning(recipe) {
+      this.plannedRecipes = this.plannedRecipes.filter(r => r.id !== recipe.id);
+      this.mealCount = this.plannedRecipes.length;
+      localStorage.setItem('plannedRecipes', JSON.stringify(this.plannedRecipes));
     }
+  },
+  created() {
+    const plannedMeals = JSON.parse(localStorage.getItem('plannedRecipes')) || [];
+    this.plannedRecipes = plannedMeals;
+    this.mealCount = plannedMeals.length;
   }
 };
 </script>
@@ -79,94 +95,100 @@ export default {
 <style lang="scss">
 @import "@/scss/form-style.scss";
 
-/* Main app styling */
 #app {
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #6c4e3c;
   min-height: 100vh;
-  padding-top: 100px; /* הגדרת padding-top ל-100px */
+  padding-top: 100px;
 }
 
-
-/* Navigation bar styling */
 #nav {
   padding: 20px;
-  background-color: rgb(85, 73, 48); /* Background color for the navigation bar */
-  position: fixed; /* Make the navbar fixed */
-  top: 0; /* Position it at the top */
-  left: 0; /* Align it to the left */
-  width: 100%; /* Stretch it across the entire width */
-  z-index: 1000; /* Ensure it stays above other content */
+  background-color: rgb(85, 73, 48);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
 }
-/* Navigation links and user info styling */
+
 #nav a, 
 #nav .nav-user span, 
 #nav .nav-links .nav-link {
   font-weight: bold;
-  color: #f3eada; /* Uniform text color */
+  color: #f3eada;
 }
 
 #nav a.router-link-exact-active {
-  color: #f3eada; /* Active link color */
+  color: #f3eada;
 }
 
-/* Custom styles for the navigation bar */
 .nav-custom {
-  background-color: rgb(85, 73, 48); /* Background color for the navigation bar */
+  background-color: rgb(85, 73, 48);
 }
 
-/* Navigation links styling */
 .nav-links .nav-link {
-  color: #f3ebda !important; /* Uniform text color for nav links */
+  color: #f3ebda !important;
 }
 
-/* User info styling */
 .nav-user span {
-  color: #13bde3; /* Uniform text color for username/guest */
+  color: #13bde3;
 }
 
-/* Dropdown menu styling */
 .nav-custom .dropdown-menu {
-  background-color: rgb(85, 73, 48); /* Background color for the dropdown menu */
-  border: 3px solid #f3ebda; /* White border for the dropdown menu */
+  background-color: rgb(85, 73, 48);
+  border: 3px solid #f3ebda;
 }
 
-/* Dropdown items styling */
 .nav-custom .dropdown-item {
-  color: #f3eada; /* Uniform text color for dropdown items */
+  color: #f3eada;
 }
 
-/* Dropdown items hover effect */
 .nav-custom .dropdown-item:hover {
-  background-color: rgb(158, 122, 75); /* Slightly darker color on hover */
+  background-color: rgb(158, 122, 75);
 }
 
-/* Navigation links hover effect */
 .nav-links .nav-link:hover {
-  background-color: #f8dec0ce; /* Hover background color */
-  color: #000000 !important; /* Hover text color */
+  background-color: #f8dec0ce;
+  color: #000000 !important;
 }
 
-/* Logout button styling */
 .logout-button {
   color: #f3eada !important;
   cursor: pointer;
-  margin-right: -35px; /* Space between logout button and separator */
+  margin-right: -35px;
 }
 
-/* Separator styling */
 .separator {
-  border-left: 1px solid #f3eada; /* Separator line */
-  height: 30px; /* Height of the separator line */
-  margin: 0 20px; /* Equal margin on both sides of the separator line */
+  border-left: 1px solid #f3eada;
+  height: 30px;
+  margin: 0 20px;
   display: inline-block;
   vertical-align: middle;
 }
 
-/* User icon styling */
 .user-icon {
-  margin-left: 10px; /* Space between username and user icon */
+  margin-left: 10px;
+}
+
+.badge {
+  font-size: 12px;
+  position: absolute;
+  top: 0;
+  right: -10px;
+}
+
+.custom-badge {
+  background-color: #f8dec0ce;
+  color: #000000;
+  border: 2px solid #ffffff;
+}
+
+.chef-icon {
+  width: 35px;
+  height: 35px;
+  margin-right: 1px;
 }
 </style>

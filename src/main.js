@@ -6,14 +6,14 @@ import axios from "axios";
 import routes from "./routes";
 import VueRouter from "vue-router";
 import 'bootstrap/dist/css/bootstrap.css'
-import BootstrapVue from 'bootstrap-vue'
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 
 Vue.use(Toast);
 
 Vue.use(BootstrapVue)
-
+Vue.use(IconsPlugin);
 Vue.use(VueRouter);
 const router = new VueRouter({
   routes,

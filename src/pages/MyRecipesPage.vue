@@ -77,7 +77,7 @@ export default {
 .title {
   text-align: center;
   margin-bottom: 20px;
-  color: #685555;
+  color: #981a51;
 }
 
 .recipes-list {

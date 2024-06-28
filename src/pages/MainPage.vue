@@ -95,7 +95,7 @@ export default {
   font-weight: bold;
   margin-bottom: 20px;
   text-align: center;
-  color: #6c4e3c; /* Adjust the color to match your theme */
+  color: #981a51; /* Adjust the color to match your theme */
 }
 .guest-section {
   display: flex;

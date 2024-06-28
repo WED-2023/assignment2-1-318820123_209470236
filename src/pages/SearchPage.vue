@@ -86,7 +86,7 @@ export default {
 .title {
   text-align: center;
   margin-bottom: 20px;
-  color: #685555; /* Title color */
+  color: #981a51; /* Title color */
 }
 
 .search-container, .results-container {

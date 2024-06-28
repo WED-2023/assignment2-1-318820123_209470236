@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import FullRecipe from '../components/FullRecipe.vue';
+import FullRecipe from '../components/FullRecipeFamily.vue';
 
 export default {
   name: 'FamilyRecipesPage',
