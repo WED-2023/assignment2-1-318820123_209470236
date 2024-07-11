@@ -28,6 +28,42 @@
         </b-form-group>
 
         <b-form-group
+          id="input-group-firstname"
+          label-cols-sm="3"
+          label="First Name:"
+          label-for="firstname"
+        >
+          <b-form-input
+            id="firstname"
+            v-model="$v.form.firstname.$model"
+            type="text"
+            :state="validateState('firstname')"
+            class="form-input"
+          ></b-form-input>
+          <b-form-invalid-feedback v-if="!$v.form.firstname.required">
+            First name is required
+          </b-form-invalid-feedback>
+        </b-form-group>
+
+        <b-form-group
+          id="input-group-lastname"
+          label-cols-sm="3"
+          label="Last Name:"
+          label-for="lastname"
+        >
+          <b-form-input
+            id="lastname"
+            v-model="$v.form.lastname.$model"
+            type="text"
+            :state="validateState('lastname')"
+            class="form-input"
+          ></b-form-input>
+          <b-form-invalid-feedback v-if="!$v.form.lastname.required">
+            Last name is required
+          </b-form-invalid-feedback>
+        </b-form-group>
+
+        <b-form-group
           id="input-group-email"
           label-cols-sm="3"
           label="Email:"
@@ -148,15 +184,16 @@ import {
   sameAs,
   email
 } from "vuelidate/lib/validators";
-import { mockRegister } from "../services/auth.js";
+import { register } from "../services/auth.js"; // שימוש בפונקציה register
+
 export default {
-  name: "Register",
+  name: "RegisterPage",
   data() {
     return {
       form: {
         username: "",
-        firstName: "",
-        lastName: "",
+        firstname: "",
+        lastname: "",
         country: null,
         password: "",
         confirmedPassword: "",
@@ -174,6 +211,12 @@ export default {
         required,
         length: (u) => minLength(3)(u) && maxLength(8)(u),
         alpha
+      },
+      firstname: {
+        required
+      },
+      lastname: {
+        required
       },
       email: {
         required,
@@ -204,10 +247,14 @@ export default {
       try {
         const userDetails = {
           username: this.form.username,
-          password: this.form.password
+          firstname: this.form.firstname,
+          lastname: this.form.lastname,
+          country: this.form.country,
+          password: this.form.password,
+          email: this.form.email
         };
 
-        const response = mockRegister(userDetails);
+        const response = await register(userDetails);
 
         this.$router.push("/login");
       } catch (err) {
@@ -226,8 +273,8 @@ export default {
     onReset() {
       this.form = {
         username: "",
-        firstName: "",
-        lastName: "",
+        firstname: "",
+        lastname: "",
         country: null,
         password: "",
         confirmedPassword: "",
@@ -242,12 +289,10 @@ export default {
 </script>
 
 <style scoped>
-
-
 .container {
   margin-top: 100px;
   width: 700px; /* Width of the container */
-  height: 630px;
+  height: 770px;
   background-color: rgb(168, 153, 121);
   padding: 30px;
   border-radius: 15px;

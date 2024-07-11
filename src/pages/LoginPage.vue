@@ -1,75 +1,73 @@
 <template>
   <div class="background">
-  <div class="login-container">
-    <h1 class="title">Login</h1>
-    <b-form @submit.prevent="onLogin">
-      <b-form-group
-        id="input-group-Username"
-        label="Username:"
-        label-for="Username"
-        class="form-group-custom"
-      >
-        <b-form-input
-          id="Username"
-          v-model="$v.form.username.$model"
-          type="text"
-          :state="validateState('username')"
-          class="form-input-custom"
-        ></b-form-input>
-        <b-form-invalid-feedback>
-          Username is required
-        </b-form-invalid-feedback>
-      </b-form-group>
+    <div class="login-container">
+      <h1 class="title">Login</h1>
+      <b-form @submit.prevent="onLogin">
+        <b-form-group
+          id="input-group-Username"
+          label="Username:"
+          label-for="Username"
+          class="form-group-custom"
+        >
+          <b-form-input
+            id="Username"
+            v-model="$v.form.username.$model"
+            type="text"
+            :state="validateState('username')"
+            class="form-input-custom"
+          ></b-form-input>
+          <b-form-invalid-feedback>
+            Username is required
+          </b-form-invalid-feedback>
+        </b-form-group>
 
-      <b-form-group
-        id="input-group-Password"
-        label="Password:"
-        label-for="Password"
-        class="form-group-custom"
-      >
-        <b-form-input
-          id="Password"
-          type="password"
-          v-model="$v.form.password.$model"
-          :state="validateState('password')"
-          class="form-input-custom"
-        ></b-form-input>
-        <b-form-invalid-feedback>
-          Password is required
-        </b-form-invalid-feedback>
-      </b-form-group>
+        <b-form-group
+          id="input-group-Password"
+          label="Password:"
+          label-for="Password"
+          class="form-group-custom"
+        >
+          <b-form-input
+            id="Password"
+            type="password"
+            v-model="$v.form.password.$model"
+            :state="validateState('password')"
+            class="form-input-custom"
+          ></b-form-input>
+          <b-form-invalid-feedback>
+            Password is required
+          </b-form-invalid-feedback>
+        </b-form-group>
 
-      <b-button
-        type="submit"
-        variant="primary"
-        class="form-button-custom"
-        >Login</b-button
+        <b-button
+          type="submit"
+          variant="primary"
+          class="form-button-custom"
+          >Login</b-button>
+        <div class="mt-2">
+          Do not have an account yet?
+          <router-link to="register" class="login-link"> Register in here</router-link>
+        </div>
+      </b-form>
+      <b-alert
+        class="mt-2"
+        v-if="form.submitError"
+        variant="warning"
+        dismissible
+        show
       >
-      <div class="mt-2">
-        Do not have an account yet?
-        <router-link to="register" class="login-link"> Register in here</router-link>
-      </div>
-    </b-form>
-    <b-alert
-      class="mt-2"
-      v-if="form.submitError"
-      variant="warning"
-      dismissible
-      show
-    >
-      Login failed: {{ form.submitError }}
-    </b-alert>
+        Login failed: {{ form.submitError }}
+      </b-alert>
+    </div>
   </div>
-</div>
-
 </template>
 
 <script>
 import { required } from "vuelidate/lib/validators";
-import { mockLogin } from "../services/auth.js";
+import axios from "axios"; // ייבוא axios
 
 export default {
-  name: "LoginForm",
+  name: "LoginPage",
   data() {
     return {
       form: {
@@ -96,17 +94,31 @@ export default {
     },
     async Login() {
       try {
-        const success = true; // modify this to test the error handling
-        const response = mockLogin(this.form.username, this.form.password, "success");
+        console.log("Attempting to log in...");
+        const credentials = {
+          username: this.form.username,
+          password: this.form.password
+        };
+        const response = await axios.post(
+          "http://localhost:80/Login", 
+          credentials
+        );
 
         this.$root.store.login(this.form.username);
-        this.$router.push("/");
+        if (this.$router.currentRoute.path !== '/') {
+          this.$router.push("/");
+        }
       } catch (err) {
-        this.form.submitError = err.response.data.message;
+        console.error("Error during login:", err);
+        if (err.response && err.response.data && err.response.data.message) {
+          this.form.submitError = err.response.data.message;
+        } else {
+          this.form.submitError = "An error occurred during login.";
+        }
       }
     },
-
     onLogin() {
+      console.log("onLogin called");
       this.form.submitError = undefined;
       this.$v.form.$touch();
       if (this.$v.form.$anyError) {

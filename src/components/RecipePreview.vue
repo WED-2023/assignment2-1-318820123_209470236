@@ -50,6 +50,8 @@
 </template>
 
 <script>
+import { addFavorite, removeFavorite } from '../services/user.js';
+
 export default {
   name: "RecipePreview",
   props: {
@@ -80,26 +82,24 @@ export default {
     viewRecipe() {
       this.$router.push({ name: 'recipe', params: { id: this.recipe.id } });
     },
-    toggleFavorite() {
+    async toggleFavorite() {
       if (!this.isLoggedIn) {
         alert('Please log in to add favorites');
         return;
       }
       
       this.recipe.favorited = !this.recipe.favorited;
-      this.updateFavorites();
-      this.$emit('toggle-favorite', this.recipe);
-    },
-    updateFavorites() {
-      let favorites = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
-      if (this.recipe.favorited) {
-        if (!favorites.some(r => r.id === this.recipe.id)) {
-          favorites.push(this.recipe);
+      try {
+        if (this.recipe.favorited) {
+          await addFavorite(this.recipe.id);
+        } else {
+          await removeFavorite(this.recipe.id);
         }
-      } else {
-        favorites = favorites.filter(r => r.id !== this.recipe.id);
+        this.$emit('toggle-favorite', this.recipe);
+      } catch (err) {
+        console.error("Failed to toggle favorite:", err);
+        alert("Failed to toggle favorite. Please try again.");
       }
-      localStorage.setItem('favoriteRecipes', JSON.stringify(favorites));
     }
   }
 };
@@ -115,7 +115,7 @@ export default {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 10px;
   margin-bottom: 20px;
-  max-width: 300px; /* Max width added */
+  max-width: 300px;
 }
 
 .recipe-image-container {
@@ -124,9 +124,9 @@ export default {
 }
 
 .recipe-image {
-  width: 300px; /* Fixed width */
-  height: 200px; /* Fixed height */
-  object-fit: cover; /* Maintain aspect ratio and cover the container */
+  width: 300px;
+  height: 200px;
+  object-fit: cover;
   border-radius: 8px;
 }
 
@@ -153,7 +153,7 @@ export default {
 }
 
 .recipe-title {
-  font-size: 18px; /* Font size increased */
+  font-size: 18px;
   font-weight: bold;
   color: #333;
   margin-bottom: 10px;
@@ -164,7 +164,7 @@ export default {
 }
 
 .icon {
-  width: 40px; /* Adjust the size of the icons */
+  width: 40px;
   height: 40px;
   margin: 0 5px;
   cursor: pointer;
@@ -188,7 +188,7 @@ export default {
 }
 
 .favorite-icon {
-  width: 32px; /* Adjust the size of the favorite icon */
+  width: 32px;
   height: 32px;
   cursor: pointer;
 }

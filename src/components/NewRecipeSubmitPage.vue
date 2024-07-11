@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="modal" v-if="visible">
     <div class="modal-content">
       <span class="close" @click="closeModal">&times;</span>
@@ -83,7 +83,6 @@ export default {
         }
       };
 
-      // שמירת המתכון ב-localStorage
       let recipes = JSON.parse(localStorage.getItem('recipes')) || [];
       recipes.push(newRecipe);
       localStorage.setItem('recipes', JSON.stringify(recipes));
@@ -214,4 +213,4 @@ form {
   border: 2px solid #6c4e3c !important; 
   color: #6c4e3c !important;
 }
-</style>
+</style> -->

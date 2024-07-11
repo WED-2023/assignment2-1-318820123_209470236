@@ -40,6 +40,7 @@ export default {
   },
   data() {
     return {
+      recipeListTitle: 'My Recipe List',
       lastViewedRecipes: [],
       randomRecipes: [],
       numRandomRecipes: 3,

@@ -5,6 +5,7 @@ import axios from "axios";
 
 import routes from "./routes";
 import VueRouter from "vue-router";
+import VueCookies from "vue-cookies";
 import 'bootstrap/dist/css/bootstrap.css'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import Toast from "vue-toastification";
@@ -15,6 +16,7 @@ Vue.use(Toast);
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin);
 Vue.use(VueRouter);
+Vue.use(VueCookies);
 const router = new VueRouter({
   routes,
 });
@@ -48,6 +50,7 @@ import {
 ].forEach((x) => Vue.use(x));
 Vue.use(Vuelidate);
 
+axios.defaults.withCredentials = true;
 
 axios.interceptors.request.use(
   function(config) {
@@ -77,7 +80,7 @@ Vue.use(VueAxios, axios);
 Vue.config.productionTip = false;
 
 const shared_data = {
-  server_domain: "http://localhost:3000",
+  server_domain: "http://localhost:80",
   username: localStorage.username,
   login(username) {
     localStorage.setItem("username", username);

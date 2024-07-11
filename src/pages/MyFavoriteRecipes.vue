@@ -16,6 +16,7 @@
 
 <script>
 import RecipePreview from '../components/RecipePreview.vue';
+import { getFavoriteRecipes } from '../services/user.js';
 
 export default {
   name: 'FavoriteRecipesPage',
@@ -31,45 +32,52 @@ export default {
     this.loadFavoriteRecipes();
   },
   methods: {
-    loadFavoriteRecipes() {
-      this.favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+    async loadFavoriteRecipes() {
+      try {
+        const response = await getFavoriteRecipes();
+        this.favoriteRecipes = response;
+      } catch (err) {
+        console.error("Failed to load favorite recipes:", err);
+      }
     },
-    removeFromFavorites(recipe) {
-      this.favoriteRecipes = this.favoriteRecipes.filter(r => r.id !== recipe.id);
-      localStorage.setItem('favoriteRecipes', JSON.stringify(this.favoriteRecipes));
+    async removeFromFavorites(recipe) {
+      try {
+        await removeFavorite(recipe.id);
+        this.favoriteRecipes = this.favoriteRecipes.filter(r => r.id !== recipe.id);
+      } catch (err) {
+        console.error("Failed to remove favorite recipe:", err);
+      }
     }
   }
 };
 </script>
 
 <style scoped>
-
-
 .container {
   padding: 40px;
   background-color: rgba(255, 255, 255, 0.9);
   border-radius: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 90%; /* Adjusts the width of the container */
-  max-width: 1200px; /* Maximum width of the container */
-  margin-top: 20px; /* Adjust the margin to move it closer to the top */
+  width: 90%;
+  max-width: 1200px;
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centers the content horizontally */
+  align-items: center;
 }
 
 .title {
   text-align: center;
   margin-bottom: 20px;
   color: #981a51;
-  font-size: 2.5rem; /* Adjust the font size */
+  font-size: 2.5rem;
 }
 
 .recipes-list {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  justify-content: center; /* Aligns the recipe previews to the center */
+  justify-content: center;
   width: 100%;
 }
 
@@ -79,6 +87,6 @@ export default {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 20px;
   width: 100%;
-  max-width: 300px; /* Adjust the maximum width of the recipe previews */
+  max-width: 300px;
 }
 </style>
