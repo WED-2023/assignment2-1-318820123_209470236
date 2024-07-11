@@ -4,7 +4,7 @@
       <div class="left-side-container">
         <div class="left-side">
           <h2 class="container-title">Random Recipes</h2>
-          <RecipePreviewList :recipes="randomRecipes" :amountToShow="numRandomRecipes" />
+          <RecipePreviewList :recipes="randomRecipes" :amount-to-show="numRandomRecipes" />
           <div class="button-container">
             <button @click="fetchRandomRecipes" class="form-button-custom">Get New Recipes</button>
           </div>
@@ -19,7 +19,7 @@
           <template v-else>
             <div class="user-section">
               <h2 class="container-title">Last Viewed Recipes</h2>
-              <RecipePreviewList :recipes="lastViewedRecipes" :amountToShow="numLastViewedRecipes" />
+              <RecipePreviewList :recipes="lastViewedRecipes" :amount-to-show="numLastViewedRecipes" />
             </div>
           </template>
         </div>
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { mockGetLastViewedRecipes, mockGetRandomRecipes } from "@/services/recipes";
+import { mockGetLastViewedRecipes, fetchRandomRecipesFromServer } from "@/services/recipes";
 import RecipePreviewList from "@/components/RecipePreviewList.vue";
 import LoginForm from "@/components/LoginForm.vue";
 
@@ -50,13 +50,18 @@ export default {
   methods: {
     fetchLastViewedRecipes() {
       if (this.$root.store.username) {
-        const response = mockGetLastViewedRecipes(3);
+        const response = mockGetLastViewedRecipes(this.numLastViewedRecipes);
         this.lastViewedRecipes = response.data.recipes;
       }
     },
-    fetchRandomRecipes() {
-      const response = mockGetRandomRecipes(3);
-      this.randomRecipes = response.data.recipes;
+    async fetchRandomRecipes() {
+      try {
+        const response = await fetchRandomRecipesFromServer();
+        console.log('Random recipes fetched:', response.data.recipes);
+        this.randomRecipes = response.data.recipes;
+      } catch (error) {
+        console.error('Error fetching random recipes:', error);
+      }
     },
     onLoginSuccess() {
       this.fetchLastViewedRecipes();

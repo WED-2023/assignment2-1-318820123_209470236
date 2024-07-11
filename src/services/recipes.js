@@ -2,6 +2,40 @@
 import recipe_full_view from "../assets/mocks/recipe_full_view.json";
 import recipe_preview from "../assets/mocks/recipe_preview.json";
 
+
+
+import axios from 'axios';
+
+const API_URL = 'http://localhost:80';
+
+
+export async function fetchRandomRecipesFromServer() {
+  try {
+    const response = await axios.get(`${API_URL}/recipes/recipe/random`, {
+      params: { number: 3 },
+      withCredentials: true
+    });
+    return { data: { recipes: response.data } };
+  } catch (error) {
+    console.error('Error fetching random recipes:', error);
+    return { data: { recipes: [] } };
+  }
+}
+
+
+export async function getRecipeById(recipeId) {
+  try {
+    const response = await axios.get(`${API_URL}/recipes/${recipeId}`, {
+      withCredentials: true
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching recipe by ID:', error);
+    throw error;
+  }
+}
+
+
 export function mockGetRecipesPreview(amount = 2) {
   // Check if the requested amount is greater than the available recipes
   let actualAmount = Math.min(amount, recipe_preview.length);
@@ -23,18 +57,7 @@ export function mockGetLastViewedRecipes(amount = 3) {
   return { data: { recipes: lastViewedRecipes } };
 }
 
-export function mockGetRandomRecipes(amount = 3) {
-  // Mocked response for random recipes
-  let actualAmount = Math.min(amount, recipe_preview.length);
-  
-  // Shuffle the array to get random elements
-  let shuffledRecipes = recipe_preview.sort(() => 0.5 - Math.random());
-  
-  // Get the first n elements after shuffling
-  let randomRecipes = shuffledRecipes.slice(0, actualAmount);
-  
-  return { data: { recipes: randomRecipes } };
-}
+
 
 export function mockSearchRecipes(amount = 5) {
   // Check if the requested amount is greater than the available recipes

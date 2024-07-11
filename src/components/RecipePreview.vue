@@ -6,7 +6,7 @@
       @mouseover="hover = true"
       @mouseleave="hover = false"
     >
-      <img :src="recipe.image" alt="Recipe Image" class="recipe-image" />
+      <img :src="recipe.imageUrl" alt="Recipe Image" class="recipe-image" />
       <div v-if="hover" class="overlay">
         <span>Click to view</span>
       </div>
@@ -24,14 +24,14 @@
              alt="Vegan" 
              class="icon" 
              v-b-tooltip="'Vegan'" />
-        <img v-if="recipe.glutenFree" 
+        <img v-if="recipe.gluten_free" 
              src="@/assets/glutenfree.jpg" 
              alt="Gluten Free" 
              class="icon" 
              v-b-tooltip="'Gluten Free'" />
       </div>
       <p class="recipe-meta">
-        <strong>Preparation time:</strong> {{ recipe.readyInMinutes }} minutes<br>
+        <strong>Preparation time:</strong> {{ recipe.preparation_time }} minutes<br>
         <strong>Likes:</strong> {{ recipe.aggregateLikes }}
       </p>
       <div class="status">

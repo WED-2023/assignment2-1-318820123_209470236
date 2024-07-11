@@ -8,7 +8,7 @@
             :recipe="recipe"
             @toggle-favorite="toggleFavorite"
           />
-          <button @click="deleteRecipe(recipe)" class="delete-button">&times;</button>
+          <button @click="deleteRecipe(recipe.title)" class="delete-button">&times;</button>
         </div>
       </div>
     </div>
@@ -17,6 +17,7 @@
 
 <script>
 import RecipePreview from '../components/RecipePreview.vue';
+import { getUserRecipes, deleteRecipe } from '../services/user';
 
 export default {
   name: 'MyRecipesPage',
@@ -32,13 +33,21 @@ export default {
     this.loadRecipes();
   },
   methods: {
-    loadRecipes() {
-      this.recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+    async loadRecipes() {
+      try {
+        const response = await getUserRecipes();
+        this.recipes = response;
+      } catch (error) {
+        console.error("Failed to load recipes:", error);
+      }
     },
-    deleteRecipe(recipe) {
-      this.recipes = this.recipes.filter(r => r !== recipe);
-      localStorage.setItem('recipes', JSON.stringify(this.recipes));
-      this.updateFavorites();
+    async deleteRecipe(title) {
+      try {
+        await deleteRecipe(title);
+        this.recipes = this.recipes.filter(r => r.title !== title);
+      } catch (error) {
+        console.error("Failed to delete recipe:", error);
+      }
     },
     toggleFavorite(recipe) {
       recipe.favorited = !recipe.favorited;
@@ -53,20 +62,7 @@ export default {
 </script>
 
 <style scoped>
-
 .container {
-  /* padding: 20px;
-  background-color: rgba(255, 255, 255, 0.9);
-  border-radius: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 90%;
-  max-width: 1200px;
-  height: 90vh;
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center; */
-
   background-color: rgba(255, 255, 255, 0.8);
   border-radius: 30px;
   padding: 20px;
@@ -84,13 +80,13 @@ export default {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  justify-content: center; /* Centers the recipe previews */
+  justify-content: center;
   width: 100%;
 }
 
 .recipe-wrapper {
   position: relative;
-  width: 300px; /* Set a fixed width for the recipe preview */
+  width: 300px;
 }
 
 .delete-button {
@@ -105,6 +101,6 @@ export default {
 }
 
 .delete-button:hover {
-  color:  #aaa;
+  color: #aaa;
 }
 </style>
