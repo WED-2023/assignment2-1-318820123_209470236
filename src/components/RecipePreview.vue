@@ -6,7 +6,7 @@
       @mouseover="hover = true"
       @mouseleave="hover = false"
     >
-      <img :src="recipe.imageUrl" alt="Recipe Image" class="recipe-image" />
+      <img :src="recipeImage" alt="Recipe Image" class="recipe-image" />
       <div v-if="hover" class="overlay">
         <span>Click to view</span>
       </div>
@@ -24,22 +24,28 @@
              alt="Vegan" 
              class="icon" 
              v-b-tooltip="'Vegan'" />
-        <img v-if="recipe.gluten_free" 
+        <img v-if="recipe.glutenFree" 
              src="@/assets/glutenfree.jpg" 
              alt="Gluten Free" 
              class="icon" 
              v-b-tooltip="'Gluten Free'" />
       </div>
       <p class="recipe-meta">
-        <strong>Preparation time:</strong> {{ recipe.preparation_time }} minutes<br>
-        <strong>Likes:</strong> {{ recipe.aggregateLikes }}
+        <strong>Preparation time:</strong> {{ recipe.readyInMinutes || 'N/A' }} minutes<br>
+        <strong>Likes:</strong> {{ recipe.aggregateLikes  || Math.floor(Math.random() * 300) + 1 }}
       </p>
       <div class="status">
-        <span v-if="recipe.viewed" class="viewed">Viewed</span>
+        <img 
+          :src="viewedIcon" 
+          alt="Viewed" 
+          class="viewed-icon" 
+          v-b-tooltip="'Viewed'" 
+        />
         <img 
           :src="favoriteIcon" 
           alt="Favorite" 
           class="favorite-icon" 
+          v-b-tooltip="'Favorite'" 
           @click="toggleFavorite" 
           @mouseover="favoriteHover = true"
           @mouseleave="favoriteHover = false"
@@ -50,7 +56,8 @@
 </template>
 
 <script>
-import { addFavorite, removeFavorite } from '../services/user.js';
+import { addFavorite, removeFavorite, isFavorite } from '../services/user.js';
+import { isRecipeWatched } from '../services/recipes.js';
 
 export default {
   name: "RecipePreview",
@@ -63,19 +70,39 @@ export default {
   data() {
     return {
       hover: false,
-      favoriteHover: false
+      favoriteHover: false,
+      favorited: false,
+      viewed: false // Add this line to track the viewed state
     };
   },
   computed: {
+    recipeImage() {
+      return this.recipe.image && this.recipe.image.match(/\.(jpeg|jpg|gif|png)$/) ? this.recipe.image : require('@/assets/defult_recipe_image.jpg');
+    },
     favoriteIcon() {
-      if (this.favoriteHover || this.recipe.favorited) {
+      if (this.favorited) {
         return require('@/assets/heart_filled.png');
       } else {
         return require('@/assets/heart_empty.png');
       }
     },
+    viewedIcon() {
+      if (this.viewed) {
+        return require('@/assets/seen.png');
+      } else {
+        return require('@/assets/not_seen.png');
+      }
+    },
     isLoggedIn() {
       return this.$root.store.username;
+    }
+  },
+  async created() {
+    try {
+      this.favorited = await isFavorite(this.recipe.id);
+      this.viewed = await isRecipeWatched(this.recipe.id);
+    } catch (error) {
+      console.error("Error checking favorite or viewed status:", error);
     }
   },
   methods: {
@@ -88,14 +115,14 @@ export default {
         return;
       }
       
-      this.recipe.favorited = !this.recipe.favorited;
       try {
-        if (this.recipe.favorited) {
-          await addFavorite(this.recipe.id);
-        } else {
+        if (this.favorited) {
           await removeFavorite(this.recipe.id);
+          this.favorited = false;
+        } else {
+          await addFavorite(this.recipe.id);
+          this.favorited = true;
         }
-        this.$emit('toggle-favorite', this.recipe);
       } catch (err) {
         console.error("Failed to toggle favorite:", err);
         alert("Failed to toggle favorite. Please try again.");
@@ -104,18 +131,20 @@ export default {
   }
 };
 </script>
-
 <style scoped>
 .recipe-preview {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #fff;
+  background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 10px;
   margin-bottom: 20px;
-  max-width: 300px;
+  max-width: 200px;
+  max-height: 450px;
+  min-height: 450px;
+  min-width: 200px;
 }
 
 .recipe-image-container {
@@ -124,8 +153,8 @@ export default {
 }
 
 .recipe-image {
-  width: 300px;
-  height: 200px;
+  width: 150px;
+  height: 150px;
   object-fit: cover;
   border-radius: 8px;
 }
@@ -177,7 +206,10 @@ export default {
 }
 
 .status {
-  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px; /* Add space between the icons */
 }
 
 .viewed {
@@ -187,13 +219,13 @@ export default {
   margin-bottom: 5px;
 }
 
-.favorite-icon {
+.favorite-icon, .viewed-icon {
   width: 32px;
   height: 32px;
   cursor: pointer;
 }
 
-.favorite-icon:hover {
+.favorite-icon:hover, .viewed-icon:hover {
   opacity: 0.7;
 }
 </style>

@@ -19,7 +19,12 @@
           <template v-else>
             <div class="user-section">
               <h2 class="container-title">Last Viewed Recipes</h2>
-              <RecipePreviewList :recipes="lastViewedRecipes" :amount-to-show="numLastViewedRecipes" />
+              <div v-if="lastViewedRecipes.length === 0" class="no-recipes-message">
+                <p>You haven't viewed any recipes yet.</p>
+              </div>
+              <div v-else>
+                <RecipePreviewList :recipes="lastViewedRecipes" :amount-to-show="numLastViewedRecipes" />
+              </div>
             </div>
           </template>
         </div>
@@ -29,7 +34,7 @@
 </template>
 
 <script>
-import { mockGetLastViewedRecipes, fetchRandomRecipesFromServer } from "@/services/recipes";
+import { getLastViewedRecipes, fetchRandomRecipesFromServer } from "@/services/recipes";
 import RecipePreviewList from "@/components/RecipePreviewList.vue";
 import LoginForm from "@/components/LoginForm.vue";
 
@@ -48,10 +53,15 @@ export default {
     };
   },
   methods: {
-    fetchLastViewedRecipes() {
+    async fetchLastViewedRecipes() {
       if (this.$root.store.username) {
-        const response = mockGetLastViewedRecipes(this.numLastViewedRecipes);
-        this.lastViewedRecipes = response.data.recipes;
+        try {
+          const response = await getLastViewedRecipes(this.numLastViewedRecipes);
+          console.log('Last viewed recipes fetched:', response);
+          this.lastViewedRecipes = response;
+        } catch (error) {
+          console.error('Error fetching last viewed recipes:', error);
+        }
       }
     },
     async fetchRandomRecipes() {
@@ -140,5 +150,14 @@ export default {
   display: flex;
   justify-content: center; /* Centers the button horizontally */
   margin-top: 20px; /* Adjust as needed for vertical spacing */
+}
+
+.no-recipes-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  font-size: 1.5rem;
+  color: #981a51; /* Adjust the color to match your theme */
 }
 </style>

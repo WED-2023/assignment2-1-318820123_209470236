@@ -70,3 +70,16 @@ export async function deleteRecipe(title) {
     throw error.response;
   }
 }
+
+export async function isFavorite(recipeId) {
+  try {
+    const response = await axios.post(`${API_URL}/users/isFavorite`, 
+      { recipeId },
+      { withCredentials: true }
+    );
+    return response.data.favorite;
+  } catch (error) {
+    throw error.response;
+  }
+}
+

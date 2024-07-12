@@ -8,7 +8,7 @@
 
 <script>
 import FullRecipeView from "@/components/FullRecipeView.vue";
-import { mockGetRecipeFullDetails } from "../services/recipes.js";
+import { getRecipeById, markRecipeAsWatched } from "../services/recipes.js";
 
 export default {
   name: 'RecipeViewPage',
@@ -23,9 +23,9 @@ export default {
   async created() {
     try {
       const recipeId = this.$route.params.id;
-      const response = await mockGetRecipeFullDetails(recipeId);
+      const response = await getRecipeById(recipeId);
 
-      const { analyzedInstructions, instructions, extendedIngredients, aggregateLikes, readyInMinutes, image, title, vegetarian, vegan, glutenFree, servings } = response.data.recipe;
+      const { analyzedInstructions, instructions, extendedIngredients, aggregateLikes, readyInMinutes, image, title, vegetarian, vegan, glutenFree, servings } = response;
 
       const _instructions = analyzedInstructions
         .map(fstep => {
@@ -48,6 +48,8 @@ export default {
         glutenFree,
         servings
       };
+
+      await markRecipeAsWatched(recipeId); // סימון המתכון כנצפה
     } catch (error) {
       console.log(error);
       this.$router.replace("/NotFound");

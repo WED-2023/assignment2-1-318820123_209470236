@@ -40,7 +40,7 @@
 
 <script>
 import RecipePreviewList from '@/components/RecipePreviewList.vue';
-import { mockSearchRecipes, mockGetLastViewedRecipes } from '../services/recipes';
+import { searchRecipes, fetchRandomRecipesFromServer } from '../services/recipes';
 
 export default {
   name: 'RecipeSearchPage',
@@ -61,14 +61,34 @@ export default {
     };
   },
   methods: {
-    searchRecipes() {
-      const response = mockSearchRecipes(parseInt(this.resultsLimit));
-      this.recipes = response.data.recipes;
+    async searchRecipes() {
+      try {
+        const response = await searchRecipes(
+          this.query,
+          this.selectedCuisine,
+          this.selectedDiet,
+          this.selectedIntolerance,
+          parseInt(this.resultsLimit)
+        );
+        console.log('Recipes found:', response);
+        this.recipes = response;
+      } catch (error) {
+        console.error('Failed to search recipes:', error);
+        alert('Failed to search recipes. Please try again.');
+      }
+    },
+    async fetchRandomRecipes() {
+      try {
+        const response = await fetchRandomRecipesFromServer();
+        console.log('Random recipes:', response.data.recipes);
+        this.recipes = response.data.recipes;
+      } catch (error) {
+        console.error('Failed to fetch random recipes:', error);
+      }
     }
   },
   created() {
-    const response = mockGetLastViewedRecipes();
-    this.recipes = response.data.recipes;
+    this.fetchRandomRecipes();
   }
 };
 </script>
