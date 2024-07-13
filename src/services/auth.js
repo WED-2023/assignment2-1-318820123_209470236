@@ -32,8 +32,8 @@
 // src/services/auth.js
 import axios from "axios";
 
-const API_URL = "http://localhost:80"; // Adjust the URL according to your backend server configuration
-
+// const API_URL = "http://localhost:80"; // Adjust the URL according to your backend server configuration
+const API_URL = "https://liors-recipes.cs.bgu.ac.il";
 export async function register(userDetails) {
   try {
     const response = await axios.post(`${API_URL}/register`, userDetails);

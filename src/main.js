@@ -80,7 +80,8 @@ Vue.use(VueAxios, axios);
 Vue.config.productionTip = false;
 
 const shared_data = {
-  server_domain: "http://localhost:80",
+  server_domain: "https://liors-recipes.cs.bgu.ac.il" ,//"http://localhost:80",
+
   username: localStorage.username,
   login(username) {
     localStorage.setItem("username", username);

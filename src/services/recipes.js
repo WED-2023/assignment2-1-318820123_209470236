@@ -3,8 +3,8 @@
 
 import axios from 'axios';
 
-const API_URL = 'http://localhost:80';
-
+// const API_URL = 'http://localhost:80';
+const API_URL = 'https://liors-recipes.cs.bgu.ac.il';
 
 export async function fetchRandomRecipesFromServer() {
   try {

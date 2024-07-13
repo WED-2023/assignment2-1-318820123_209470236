@@ -98,7 +98,8 @@ export default {
           password: this.form.password
         };
         const response = await axios.post(
-          "http://localhost:80/Login", // וודא שכתובת ה-API נכונה
+          // "http://localhost:80/Login",
+          "https://liors-recipes.cs.bgu.ac.il/Login",
           credentials
         );
 
